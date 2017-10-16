@@ -1,0 +1,692 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="gr-reservation-widget.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="gr-event">
+
+    <template>
+
+        <style>
+             :host {
+                display: block;
+                margin: 0;
+
+
+                color: var(--app-text-color);
+                --app-btn-border-color: var(--app-primary-color);
+            }
+
+            [hidden] {
+                display: none !important;
+            }
+
+            app-header {
+                color: var(--app-text-color);
+            }
+
+            paper-icon-button {
+                color: var(--app-text-color);
+            }
+
+            paper-ripple {
+                color: var(--app-primary-color);
+            }
+
+            .content {
+                width: 85%;
+                margin: 48px auto 0 auto;
+            }
+
+            .event-img {
+                position: relative;
+                width: 495px;
+                height: 700px;
+
+                margin: 16px;
+                margin-right: 24px;
+                padding-right: 4px;
+                box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+            }
+
+            .event-border {
+
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: 0;
+                width: calc(100% - 4px);
+                height: 100%;
+                background-color: var(--app-primary-color);
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
+
+
+
+            .event-info {
+                margin: 16px;
+                position: relative;
+                @apply --layout-flex;
+                @apply --layout-vertical;
+            }
+
+
+
+            .event-name {
+                margin-bottom: 16px;
+                @apply --paper-font-display2;
+                font-family: 'Lato', sans-serif;
+                text-transform: uppercase;
+            }
+
+
+
+            .event-date {
+                margin-top: 8px;
+                margin-bottom: 24px;
+                @apply --paper-font-headline;
+                color: var(--app-text-color);
+                position: relative;
+                display: inline-block;
+                padding-left: 4px;
+                font-weight: 500;
+            }
+
+            .date-rest {
+                margin-right: 6px;
+            }
+
+            .date-weekday {
+                text-transform: capitalize;
+                margin-right: 6px;
+            }
+
+            .date-cover {
+                z-index: -1;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: calc(100% - 4px);
+                height: 45%;
+                background-color: var(--app-primary-color);
+            }
+
+            .event-description {
+                margin-top: 16px;
+                @apply --paper-font-subhead;
+            }
+
+            .event-artist {
+                margin-top: 24px;
+
+                @apply --layout-vertical;
+                @apply --layout-wrap;
+                @apply --paper-font-subhead;
+            }
+
+            .event-showmen {
+                margin-top: 16px;
+                @apply --paper-font-subhead;
+            }
+
+            .showmen-title {
+                @apply --paper-font-headline;
+                margin: 0 8px 8px 0;
+                color: var(--app-text-color);
+                position: relative;
+                display: inline-block;
+                font-size: 18px;
+                padding-left: 4px;
+                font-weight: 500;
+            }
+
+            .showmen-cover {
+                z-index: -1;
+                position: absolute;
+                top: 2px;
+                left: 0;
+                width: calc(100% - 4px);
+                height: 40%;
+                background-color: var(--app-primary-color);
+            }
+
+            .showman-name {
+                margin-top: 5px;
+            }
+
+            .artist-time {
+                @apply --paper-font-headline;
+                margin-right: 8px;
+                color: var(--app-text-color);
+                position: relative;
+                font-size: 22px;
+                padding-left: 4px;
+                font-weight: 500;
+            }
+
+            .time-cover {
+                z-index: -1;
+                position: absolute;
+                top: 2px;
+                left: 0;
+                width: calc(100% - 4px);
+                height: 35%;
+                background-color: var(--app-primary-color);
+            }
+
+            .artist-style {
+                margin-bottom: 16px;
+                opacity: 0.7;
+            }
+
+            .artist-name {
+                @apply --paper-font-headline;
+                font-size: 28px;
+                margin-top: -10px;
+                padding-left: 4px;
+                font-family: 'Lato', sans-serif;
+            }
+
+            .artist-box {
+                @apply --layout-vertical;
+                @apply --layout-start;
+                margin-right: 24px;
+                margin-bottom: 24px;
+            }
+
+            .card-image {
+                object-fit: cover;
+                height: 700px;
+                width: 100%;
+            }
+
+            .layout-horizontal {
+                @apply --layout-horizontal;
+            }
+
+            .event {
+                @apply --layout-horizontal;
+                position: relative;
+            }
+
+            .layout-vertical {
+                @apply --layout-vertical;
+                margin-top: 4px;
+            }
+
+            .button {
+                cursor: pointer;
+                transition: transform 200ms;
+                width: calc(100% - 4px);
+                height: 40px;
+                background-color: var(--app-text-color);
+                color: var(--app-body-color);
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-center-justified;
+            }
+
+            .button-border {
+                transition: transform 200ms;
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: 0;
+                width: calc(100% - 4px);
+                height: 100%;
+                background-color: var(--app-btn-border-color);
+            }
+
+            .button:hover {
+                -webkit-transform: translate(4px, 4px);
+                transform: translate(4px, 4px);
+            }
+
+            .button:hover .button-border {
+
+                -webkit-transform: translate(-4px, -4px);
+                transform: translate(-4px, -4px);
+            }
+
+            .button-label {
+                @apply --paper-font-subhead;
+                font-size: 20px;
+                text-transform: uppercase;
+                font-family: 'Lato', sans-serif;
+                margin-bottom: 4px;
+                font-weight: bold;
+                letter-spacing: 1.5px;
+            }
+
+            .form {
+                width: 100%;
+
+                max-width: 600px;
+            }
+
+            .artist-list {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+            }
+
+            .action-bar {
+                max-width: 600px;
+                position: relative;
+            }
+
+            .action-bar-img {
+                position: relative;
+                margin-top: 16px;
+                width: calc(100% + 4px);
+            }
+
+            @media (max-width: 1450px) {
+
+                .event-img {
+                    width: 424px;
+                    height: 600px;
+                }
+
+                .card-image {
+                    height: 600px;
+                }
+
+                .event-date {
+                    font-size: 22px;
+                }
+            }
+
+            @media (max-width: 1050px) {
+                .content {
+                    width: 95%;
+                }
+
+                app-header {
+                    background-image: url(http://178.62.212.17/img/static/wood_horizontal.jpg);
+                }
+                paper-icon-button {
+                    color: var(--app-body-color);
+                }
+            }
+
+            @media (max-width: 768px) {
+
+                .event-border {
+                    bottom: 3px;
+                    height: calc(100% - 6px);
+                }
+
+                .action-bar {
+                    margin-bottom: 24px;
+                }
+
+                .content {
+                    width: 85%;
+                    margin-top: 0;
+                }
+                .event {
+                    @apply --layout-vertical;
+                }
+
+                .event-img {
+                    margin-right: 16px;
+                    width: auto;
+                    height: auto;
+                }
+
+                .card-image {
+                    height: auto;
+                }
+            }
+
+            @media (max-width: 550px) {
+
+                .content {
+                    width: 97%;
+                    margin-top: -8px;
+                }
+
+                .event-name {
+                    font-size: 40px;
+                }
+
+                .artist-name {
+                    font-size: 26px;
+                }
+
+                .artist-time {
+                    font-size: 22px;
+                }
+            }
+
+            @media (max-width: 410px) {
+
+                .content {
+                    width: 100%;
+                }
+                .event-name {
+                    font-size: 36px;
+                    margin-bottom: 8px;
+                }
+
+                .event-info {
+                    margin-top: 0;
+                }
+
+                .artist-name {
+
+                    font-size: 24px;
+                }
+
+                .artist-time {
+                    font-size: 20px;
+                }
+            }
+
+            @media (max-width: 330px) {
+                .event-name {
+                    font-size: 30px;
+                }
+
+                .event-date {
+                    font-size: 20px;
+                }
+
+                .artist-name {
+                    font-size: 22px;
+                }
+
+                .artist-time {
+                    font-size: 18px;
+                }
+            }
+        </style>
+
+        <app-route route="[[route]]" pattern="/:event" data="{{eventData}}"></app-route>
+
+        <iron-ajax id="ajax" handle-as="json" on-response="handleResponse"></iron-ajax>
+
+        <iron-media-query query="max-width: 768px" query-matches="{{smallScreen}}"></iron-media-query>
+
+        <app-header-layout id="layout">
+            <app-header condenses reveals effects="waterfall">
+                <app-toolbar>
+                    <a href="/events" tabindex="-1">
+                        <paper-icon-button icon="gr-icons:arrow-back"></paper-icon-button>
+                    </a>
+                    <div main-title></div>
+                </app-toolbar>
+            </app-header>
+
+            <div class="content">
+                <div class="event">
+
+                    <div class="event-img">
+                        <img class="card-image" src="[[_getImage(event)]]" />
+                        <div class="event-border"></div>
+                        <div class="action-bar-img" hidden$="[[hideImgBtn]]">
+                            <div>
+                                <div class="button" on-tap="_toggleForm">
+                                    <div class="button-label">[[btnLabel]]</div>
+                                    <paper-ripple></paper-ripple>
+                                </div>
+                                <div class="button-border"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="event-info">
+                        <div class="event-name">[[event.name]]</div>
+                        <div>
+                            <div class="event-date">
+                                <div class="date-cover"></div>
+                                <div class="layout-horizontal">
+                                    <div class="date-weekday">[[event.date.weekday]],</div>
+                                    <div class="date-rest">[[event.date.day]] [[event.date.month]] </div>
+                                    <div class="date-time">[[event.time]] </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="" hidden$="[[!hideForm]]">
+
+                            <div class="event-description">
+                                <marked-element markdown="[[event.info]]">
+                                    <div class="markdown-html custom"></div>
+                                </marked-element>
+                            </div>
+
+                            <div class="event-artist">
+                                <div class="artist-list">
+                                    <template is="dom-repeat" items="[[event.artists]]" as="artist">
+                                        <div class="artist-box">
+                                            <span class="artist-time">
+                                                                    <div class="time-cover"></div>
+                                                                    [[artist.start]]
+                                                                </span>
+                                            <div class="layout-vertical">
+                                                <div class="artist-name">[[artist.name]]</div>
+
+                                            </div>
+
+                                        </div>
+                                    </template>
+                                </div>
+
+
+                                <div class="artist-list">
+                                    <template is="dom-repeat" items="[[event.showmen]]" as="showman">
+                                        <div class="artist-box">
+                                            <div class="artist-time">
+                                                <div class="time-cover"></div>
+                                                Ведущий
+                                            </div>
+                                            <div class="layout-vertical">
+                                                <div class="artist-name">[[showman.name]]</div>
+
+                                            </div>
+
+                                        </div>
+                                    </template>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="form" hidden$="[[hideForm]]">
+                            <gr-reservation-widget event="[[event]]"></gr-reservation-widget>
+                        </div>
+                        <div class="action-bar" hidden$="[[!hideImgBtn]]">
+                            <div>
+                                <div class="button" on-tap="_toggleForm">
+                                    <div class="button-label">[[btnLabel]]</div>
+                                    <paper-ripple></paper-ripple>
+                                </div>
+                                <div class="button-border"></div>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </app-header-layout>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gr-event',
+
+            properties: {
+                event: {
+                    type: Object,
+                    notify: true,
+                    observer: '_eventChanged'
+                },
+                active: {
+                    type: Boolean,
+                    observer: '_activeChanged'
+                },
+
+                btnLabel: {
+                    type: String,
+                    value: 'Забронировать'
+                },
+
+                hideImgBtn: {
+                    type: Boolean,
+                },
+
+                hideForm: {
+                    type: Boolean,
+                    value: true,
+                }
+            },
+
+            observers: [
+                '_eventPageChanged(eventData.event)',
+            ],
+
+            ready: function () {
+
+                this.hideImgBtn = (this.smallScreen) ? true : false;
+
+
+                this.fire('gr-section-change', {
+                    'section': 'events'
+                });
+
+            },
+
+            _eventPageChanged: function (event) {
+                if (event !== undefined && this.route.prefix === '/event') {
+                    this.$.ajax.url = ['http://178.62.212.17/api/v1/events', event].join('/') + '/';
+                    this.$.ajax.generateRequest();
+                }
+            },
+
+            _toggleForm: function (e) {
+                if (this.hideForm) {
+                    this.hideForm = false;
+                    this.btnLabel = 'Отмена';
+                    this.customStyle['--app-btn-border-color'] = '#F4511E';
+                    this.updateStyles();
+
+
+                    this.hideImgBtn = true;
+                } else {
+                    this.hideForm = true;
+                    this.btnLabel = 'Забронировать';
+                    this.customStyle['--app-btn-border-color'] = '#8BC34A';
+                    this.updateStyles();
+                    this.hideImgBtn = (this.smallScreen) ? true : false;
+
+                }
+            },
+
+            _activeChanged: function (active) {
+
+                if (!active) {
+                    this.hideForm = true;
+                    this.btnLabel = 'Забронировать';
+                    this.customStyle['--app-btn-border-color'] = '#8BC34A';
+                    this.updateStyles();
+                } else {
+                    this.fire('gr-section-change', {
+                        'section': 'events'
+                    });
+                }
+            },
+
+            handleResponse: function (request) {
+                var index, len, date;
+                var response = request.detail.response;
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long',
+                };
+                date = new Date(response.date);
+                date = date.toLocaleString("ru", options).split(' ');
+                response.date = {
+                    'weekday': date[0].slice(0, -1),
+                    'day': date[1],
+                    'month': date[2],
+                    'year': date[3],
+                    'original': response.date,
+                };
+
+                if (response.time !== null) {
+                    response.time = response.time.slice(0, -3);
+                }
+
+                for (index = 0, len = response.artists.length; index < len; ++index) {
+                    response.artists[index].start = response.artists[index].start.slice(0, -3);
+                }
+
+                this.event = response;
+
+            },
+
+            _getImage: function (event) {
+                var img, index;
+                if (Object.getOwnPropertyNames(event.poster).length === 0) {
+                    index = this._randomInteger(0, event.artists.length - 1);
+                    img = event.artists[index].img.original;
+                } else {
+                    img = event.poster.original;
+                }
+                return img;
+            },
+
+            _getTime: function (time) {
+                return time.slice(0, -3);
+            },
+
+            _hideShowmen: function (event) {
+                return event.showmen.length === 0;
+            },
+
+            _randomInteger: function (min, max) {
+                var rand = min - 0.5 + Math.random() * (max - min + 1)
+                rand = Math.round(rand);
+                return rand;
+            },
+
+
+
+        });
+    </script>
+
+</dom-module>

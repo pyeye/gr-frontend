@@ -1,0 +1,49 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="gr-view404">
+  <template>
+    <style  include="shared-styles">
+      :host {
+        display: block;
+
+      }
+    </style>
+
+    <app-header-layout>
+
+      <app-header condenses reveals effects="waterfall">
+        <app-toolbar>
+          <slot select="[drawer-toggle]"></slot>
+          <div main-title>404</div>
+        </app-toolbar>
+      </app-header>
+
+    <!-- 
+      If deploying in a folder replace href="/" with the full path to your site.
+      Such as: href=="http://polymerelements.github.io/polymer-starter-kit"
+    -->
+    Oops you hit a 404. <a href="/">Head back to home.</a>
+    </app-header-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gr-view404',
+    });
+  </script>
+</dom-module>

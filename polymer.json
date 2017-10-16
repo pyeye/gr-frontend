@@ -1,0 +1,41 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/gr-app.html",
+  "fragments": [
+    "src/lazy-resources.html",
+    "src/gr-article.html",
+    "src/gr-news.html",
+    "src/gr-gallery.html",
+    "src/gr-album.html",
+    "src/gr-event.html",
+    "src/gr-events.html",
+    "src/gr-about.html",
+    "src/gr-menu.html",
+    "src/gr-view404.html",
+    "src/gr-reservation.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "assets/**/*",
+    "fonts/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "app.js",
+    "bower_components/lightgallery.js/dist/**/*",
+    "bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js",
+    "bower_components/lg-hash.js/dist/lg-hash.min.js",
+    "bower_components/lightgallery.js/dist/css/lightgallery.min.css",
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ],
+  "builds": [{
+    "js": {"minify": true},
+    "css": {"minify": true},
+    "html": {"minify": true},
+    "addServiceWorker": true,
+    "bundle": true,
+    "swPrecacheConfig": "sw-precache-config.js"
+  }]
+}

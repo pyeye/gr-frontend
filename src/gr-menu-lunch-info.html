@@ -1,0 +1,293 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
+<dom-module id="gr-menu-lunch-info">
+
+    <template>
+
+        <style>
+             :host {
+                --iron-icon-fill-color: #D32F2F;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+                width: 100%;
+                margin: 16px;
+                margin-bottom: 40px;
+                color: var(--app-text-color);
+            }
+
+            .portrait-cover {
+                background: #232323;
+                opacity: 0.7;
+
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: calc(100% - 4px);
+            }
+
+
+            [hidden] {
+                display: none;
+            }
+
+            .lunch {
+
+
+                width: 100%;
+
+                @apply --layout-vertical;
+            }
+
+            .lunch-time-container {
+                position: relative;
+                display: inline-block;
+                padding-left: 4px;
+            }
+
+            .lunch-cover {
+                z-index: -1;
+                position: absolute;
+                top: .1em;
+                left: 0;
+                width: calc(100% - 4px);
+                height: 40%;
+                background-color: var(--app-primary-color);
+            }
+
+            .lunch-time {
+                @apply --paper-font-display1;
+                text-align: center;
+                font-size: 26px;
+                font-weight: bold;
+                font-style: normal;
+                letter-spacing: 1px;
+                margin-bottom: 16px;
+                line-height: 45px;
+            }
+
+            .lunch-description {
+                @apply --paper-font-display1;
+                font-size: 20px;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+            .layout-horizontal {
+                @apply --layout-horizontal;
+                @apply --layout-around-justified;
+                margin-bottom: 48px;
+            }
+
+            .lunch-price {
+                @apply --layout-vertical;
+                @apply --paper-font-display1;
+                text-transform: uppercase;
+                font-size: 22px;
+                text-align: center;
+                letter-spacing: 0.7px;
+                margin-right: 8px;
+                font-weight: 500;
+                line-height: 28px;
+            }
+
+            .lunch-sale {
+                @apply --paper-font-subhead;
+                font-size: 18px;
+            }
+
+            .portrait-cover {
+                background: #232323;
+                opacity: 0.7;
+
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: calc(100% - 4px);
+            }
+
+            .portrait {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 400px;
+                padding-right: 4px;
+                color: var(--app-body-color);
+            }
+
+            .portrait-description {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+
+                font-weight: 400;
+                padding: 16px;
+                @apply --paper-font-subhead;
+                font-size: 18px;
+            }
+
+            .portrait-title {
+                text-align: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+
+                font-weight: 400;
+                padding: 16px;
+                @apply --paper-font-subhead;
+                font-size: 18px;
+            }
+
+            .portrait-border {
+
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: 0;
+                width: calc(100% - 4px);
+                height: 100%;
+                background-color: var(--app-primary-color);
+            }
+
+            iron-image {
+                height: 400px;
+                width: 100%;
+            }
+
+            .description {
+                width: 80%;
+                margin: 16px auto;
+                display: none;
+                color: var(--app-text-color);
+            }
+
+            @media (max-width: 1450px) {
+
+                .lunch-time {
+                    font-size: 24px;
+                }
+
+                .lunch-price {
+                    font-size: 20px;
+                }
+
+                .lunch-sale {
+                    font-size: 16px;
+                }
+            }
+
+            @media (max-width: 768px) {
+
+                .lunch-time {
+                    font-size: 28px;
+                }
+
+                .lunch-price {
+                    font-size: 24px;
+                }
+
+                .lunch-sale {
+                    font-size: 20px;
+                }
+
+                .portrait {
+                    margin: 16px;
+                    height: 340px;
+                    width: auto;
+                }
+
+
+
+                iron-image {
+                    height: 340px;
+                    width: 100%;
+                }
+            }
+
+            @media (max-width: 410px) {
+                .lunch-time {
+                    font-size: 26px;
+                }
+
+                .lunch-price {
+                    font-size: 22px;
+                }
+
+                .lunch-sale {
+                    font-size: 18px;
+                }
+            }
+
+            @media (max-width: 330px) {
+                .lunch-time {
+                    font-size: 24px;
+                }
+
+                .lunch-price {
+                    font-size: 20px;
+                }
+
+                .lunch-sale {
+                    font-size: 16px;
+                }
+            }
+        </style>
+
+
+
+        <div class="portrait">
+            <iron-image sizing="cover" fade src="http://178.62.212.17/img/static/menu/lunch.jpg"></iron-image>
+            <div class="portrait-cover"></div>
+            <div class="portrait-border"></div>
+            <div class="portrait-title">
+                <div class="lunch-time">С 12:00 ДО 16:00</div>
+            </div>
+            <div class="portrait-description">
+                <div class="lunch">
+
+                    <div class="layout-horizontal">
+                        <div class="lunch-price">
+                            <div class="price-count">2 блюда</div>
+                            <div class="price-value">200 &#x20bd;</div>
+                        </div>
+                        <div class="lunch-price">
+                            <div class="price-count">3 блюда</div>
+                            <div class="price-value">250 &#x20bd;</div>
+                        </div>
+                    </div>
+
+                    <div class="lunch-sale">Скидка на десерты 20%</div>
+                    <div class="lunch-sale">Свежевыжатый сок 100 &#x20bd;</div>
+                    <div class="lunch-sale">Фруктовый пар 299 &#x20bd;</div>
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gr-menu-lunch-info',
+
+
+        });
+    </script>
+
+</dom-module>

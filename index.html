@@ -1,0 +1,232 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!doctype html>
+<html lang="ru" class="no-scroll">
+  <head>
+    <title>Greenery</title>
+    <base href="/">
+    <meta charset="utf-8">
+    
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    
+    <meta name="description" content="Greenery Gastro Bar">
+
+    <link rel="icon" href="/images/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" async>
+    <link rel="import" href="/src/gr-app.html" id="htmlImport" async>
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- See https://goo.gl/qRE0vM -->
+    <meta name="theme-color" content="#94c21a">
+
+    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Greenery">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Greenery">
+
+    <!-- Homescreen icons -->
+    <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="/images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/images/manifest/icon-192x192.png">
+
+    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <script>
+
+    var importsLoadedDeferred = new Promise(function (resolve, reject) {
+      var htmlImport = document.querySelector('#htmlImport');
+      htmlImport.addEventListener('load', resolve);
+    });
+    // Setup Polymer options
+    window.Polymer = window.Polymer || {
+      dom: 'shadow',
+      lazyRegister: true,
+    };
+      
+    </script>
+
+   
+
+    <style>
+
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Regular.ttf') format('truetype');
+    font-weight: normal;
+  }
+
+  @font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  @font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+
+  @font-face {
+    font-family: 'Lato';
+    src: url('fonts/Lato-Semibold.ttf') format('truetype');
+    font-weight: bold;
+  }
+
+      .no-scroll,
+    body.loading {
+      overflow: hidden;
+    }
+
+    body.loading #splash {
+      opacity: 1;
+    }
+
+    #app.hidden {
+      visibility: hidden;
+    }
+
+
+    #splash {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transition: opacity 400ms cubic-bezier(0, 0, 0.2, 1);
+      opacity: 0;
+      will-change: opacity;
+      z-index: 1;
+      -webkit-transform: translateZ(1px);
+      transform: translateZ(1px);
+      background-color: #232323;
+    }
+
+    #splash-logo {
+      width: 100vw;
+      height: 100vh;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-position: left top;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .cover {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #313131;
+      opacity: 0.6;
+    }
+
+    .preloading-info {
+      color: #fff;
+      font-size: 24px;
+      letter-spacing: 4px;
+      font-family: 'Lato', sans-serif;
+      line-height: 34px;
+      margin: 16px 0;
+      z-index: 1;
+    }
+
+    .preloading-row {
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      flex-direction: row;
+      z-index: 1;
+    }
+
+    .preloading-buttons {
+      font-size: 18px;
+      letter-spacing: 4px;
+      font-family: 'Lato', sans-serif;
+      line-height: 34px;
+      color: #fff;
+      margin: 0 16px;
+      padding: 4px 16px;
+      border: 2px solid #fff;
+      text-transform: uppercase;
+      transition: all ease .3s;
+      cursor: pointer;
+    }
+
+    .preloading-buttons:hover {
+      color: #94c21a;
+      border: 2px solid #94c21a;
+    }
+
+     a {
+      text-decoration: none;
+    }
+
+      body {
+        margin: 0;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #ddd;
+      }
+
+      @media (max-width: 550px) {
+        .preloading-info {
+            margin-top: 100px;
+        }
+      }
+
+  
+  
+    </style>
+  </head>
+
+
+  <body class="loading">
+
+      <div id="splash">
+          <div id="splash-logo">
+            <div class="cover"></div>
+            <div class="preloading-info">18 ЕСТЬ?</div>
+            <div class="preloading-row">
+              <div class="preloading-buttons" id="preloading-confirm">да</div>
+              <a href="https://www.lego.com/ru-ru"><div class="preloading-buttons" id="preloading-dismiss">нет</div></a>
+            </div>
+      
+          </div>
+        </div>
+
+    <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js"></script>
+    <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js"></script>
+    <script src="bower_components/lg-hash.js/dist/lg-hash.min.js"></script>
+
+    <gr-app id="app" class="hidden"></gr-app>
+    <!-- Built with love using Polymer Starter Kit -->
+    <script src="app.js"></script>
+  </body>
+</html>

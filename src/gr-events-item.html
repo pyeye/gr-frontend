@@ -1,0 +1,470 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="gr-reservation-widget.html">
+
+<dom-module id="gr-events-item">
+    <template>
+        <style include="shared-styles">
+             :host {
+                display: block;
+                --app-btn-border-color: var(--app-primary-color);
+
+                @apply --layout-vertical;
+                display: inline-block;
+                width: 358px;
+                margin-bottom: 48px;
+                padding: 16px;
+                position: relative;
+                transition: box-shadow .2s ease;
+            }
+
+
+
+            [hidden] {
+                display: none;
+            }
+
+
+
+
+
+
+
+            .event-border {
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                transition: transform 200ms;
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: 0;
+                width: calc(100% - 4px);
+                height: 100%;
+                background-color: var(--app-primary-color);
+            }
+
+            .event-img {
+
+                transition: transform 200ms;
+                position: relative;
+                width: 100%;
+                height: 500px;
+                margin-top: 12px;
+                padding-right: 4px;
+
+                width: calc(100% - 4px);
+            }
+
+            .event-img:hover {
+                -webkit-transform: translate(4px, 4px);
+                transform: translate(4px, 4px);
+            }
+
+            .event-img:hover .event-border {
+
+                -webkit-transform: translate(-4px, -4px);
+                transform: translate(-4px, -4px);
+            }
+
+            .event:hover .event-title {
+                text-decoration: underline;
+                text-decoration-color: var(--app-text-color);
+            }
+
+
+
+            .green {
+
+                height: 100%;
+                background-color: var(--app-primary-color);
+            }
+
+            .green .card-image {
+                filter: grayscale(100%) contrast(.8);
+                mix-blend-mode: multiply;
+            }
+
+            .green::after {
+                background-color: #263238;
+                mix-blend-mode: lighten;
+            }
+
+            .event-img::after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                transition: all ease-in-out .5s;
+            }
+
+            .card-image {
+                object-fit: cover;
+                height: 500px;
+                width: 100%;
+            }
+
+
+
+
+
+
+            .event-date {
+
+
+                color: var(--app-text-color);
+                @apply --paper-font-subhead;
+
+                margin: 4px 0;
+                font-weight: 500;
+                position: relative;
+                display: inline-block;
+                padding-left: 4px;
+                font-size: 18px;
+            }
+
+            .date-day {
+
+
+                margin: 0 4px;
+            }
+
+            .date-weekday {
+                text-transform: capitalize;
+            }
+
+            .date-month {
+                margin-right: 6px;
+            }
+
+            .event-title {
+                color: var(--app-text-color);
+                @apply --paper-font-headline;
+                font-family: 'Lato', sans-serif;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+                font-weight: bold;
+                font-size: 26px;
+            }
+
+            .layout-vertical {
+                @apply --layout-vertical;
+                @apply --paper-font-subhead;
+                font-size: 18px;
+                line-height: 1.1;
+            }
+
+            .layout-horizontal {
+                @apply --layout-horizontal;
+            }
+
+
+
+            a {
+                text-decoration: none;
+            }
+
+            paper-ripple {
+                color: var(--app-primary-color);
+            }
+
+            .button {
+                cursor: pointer;
+                margin-top: 8px;
+                transition: transform 200ms;
+                width: calc(100% - 4px);
+                height: 40px;
+                margin-top: 16px;
+                background-color: var(--app-text-color);
+                color: var(--app-body-color);
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-center-justified;
+            }
+
+            .button-border {
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                transition: transform 200ms;
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: 0;
+                width: calc(100% - 4px);
+                height: 100%;
+                background-color: var(--app-btn-border-color);
+            }
+
+            .button:hover {
+                -webkit-transform: translate(4px, 4px);
+                transform: translate(4px, 4px);
+            }
+
+            .button:hover .button-border {
+
+                -webkit-transform: translate(-4px, -4px);
+                transform: translate(-4px, -4px);
+            }
+
+            .button-label {
+                @apply --paper-font-subhead;
+                font-size: 20px;
+                text-transform: uppercase;
+                font-family: 'Lato', sans-serif;
+                margin-bottom: 4px;
+                font-weight: bold;
+                letter-spacing: 1.5px;
+            }
+
+            .form {
+                width: 100%;
+                height: 512px;
+            }
+
+            .action-bar {
+                position: relative;
+            }
+
+
+
+
+
+
+
+
+
+            .date-cover {
+                z-index: -1;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: calc(100% - 3px);
+                height: 40%;
+                background-color: var(--app-primary-color);
+            }
+
+            @media (max-width: 1450px) {
+                 :host {
+
+                    width: 358px;
+                }
+
+                .card-image {
+
+                    height: 500px;
+                }
+
+                .event-img {
+
+
+                    height: 500px;
+                }
+            }
+
+            @media (max-width: 1250px) {
+                 :host {
+
+                    width: 358px;
+                }
+
+                .card-image {
+
+                    height: 500px;
+                }
+
+                .event-img {
+
+
+                    height: 500px;
+                }
+            }
+
+            @media (max-width: 800px) {
+
+                 :host {
+
+                    width: 287px;
+                }
+
+                .card-image {
+
+                    height: 400px;
+                }
+
+                .event-img {
+
+
+                    height: 400px;
+                }
+            }
+
+            @media (max-width: 660px) {
+                 :host {
+
+                    width: 358px;
+                }
+
+                .card-image {
+
+                    height: 500px;
+                }
+
+                .event-img {
+
+
+                    height: 500px;
+                }
+            }
+
+            @media (max-width: 410px) {
+                 :host {
+                    padding: 8px;
+                    width: 322px;
+                }
+
+                .card-image {
+
+                    height: 450px;
+                }
+
+                .event-img {
+
+
+                    height: 450px;
+                }
+
+                .event-title {
+
+                    font-size: 22px;
+                }
+            }
+
+            @media (max-width: 360px) {
+                 :host {
+                    padding: 4px;
+                    width: 287px;
+                }
+
+                .card-image {
+
+                    height: 400px;
+                }
+
+                .event-img {
+
+
+                    height: 400px;
+                }
+            }
+        </style>
+
+
+
+        <div class="event">
+            <a href="/event/[[event.pk]]">
+                <div class="event-title">[[event.name]]</div>
+                <div>
+                    <div class="event-date">
+                        <div class="date-cover"></div>
+                        <div class="layout-horizontal">
+                            <div class="date-weekday">[[event.date.weekday]], </div>
+                            <div class="date-day">[[event.date.day]]</div>
+                            <div class="date-month">[[event.date.month]]</div>
+                            <div class="date-time">[[event.time]]</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="event-img" hidden$="[[!hideForm]]">
+                    <div class="img-box">
+                        <iron-image class="card-image" sizing="cover" fade src="[[_getImage(event)]]"></iron-image>
+
+                        <div class="event-border"></div>
+                    </div>
+                    <paper-ripple></paper-ripple>
+                </div>
+            </a>
+            <div class="form" hidden$="[[hideForm]]">
+                <gr-reservation-widget event="[[event]]"></gr-reservation-widget>
+            </div>
+            <div class="action-bar">
+                <div>
+                    <div class="button" on-tap="_toggleForm">
+                        <div class="button-label">[[btnLabel]]</div>
+                        <paper-ripple></paper-ripple>
+                    </div>
+                    <div class="button-border"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gr-events-item',
+
+            properties: {
+                hideForm: {
+                    type: Boolean,
+                    value: true,
+                },
+
+                btnLabel: {
+                    type: String,
+                    value: 'Забронировать'
+                },
+            },
+
+            _getImage: function (event) {
+                var img, index;
+                if (Object.getOwnPropertyNames(event.poster).length === 0) {
+                    index = this._randomInteger(0, event.artists.length - 1);
+                    img = event.artists[index].img.original;
+                } else {
+                    img = event.poster.original;
+                }
+                return img;
+            },
+
+            _randomInteger: function (min, max) {
+                var rand = min - 0.5 + Math.random() * (max - min + 1)
+                rand = Math.round(rand);
+                return rand;
+            },
+
+            _toggleForm: function (e) {
+                if (this.hideForm) {
+                    this.hideForm = false;
+                    this.btnLabel = 'Отмена';
+                    this.customStyle['--app-btn-border-color'] = '#F4511E';
+                    this.updateStyles();
+                } else {
+                    this.hideForm = true;
+                    this.btnLabel = 'Забронировать';
+                    this.customStyle['--app-btn-border-color'] = '#8BC34A';
+                    this.updateStyles();
+                }
+            }
+
+
+        });
+    </script>
+</dom-module>

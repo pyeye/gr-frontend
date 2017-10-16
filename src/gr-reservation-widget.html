@@ -1,0 +1,446 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-container.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-error.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
+<dom-module id="gr-reservation-widget">
+
+    <template>
+
+        <style>
+             :host {
+                width: 100%;
+                padding: 8px;
+                color: var(--app-text-color);
+                --paper-spinner-color: var(--app-body-color);
+                --iron-icon-fill-color: var(--app-text-color);
+                --paper-toast-background-color: var(--app-accent-color);
+                --paper-input-container-color: var(--app-text-color);
+                --paper-input-container-focus-color: var(--app-primary-color);
+                --paper-input-container-input-color: var(--app-text-color);
+                --paper-checkbox-label-color: var(--app-text-color);
+                --paper-checkbox-unchecked-color: var(--app-text-color);
+                --paper-checkbox-unchecked-ink-color: var(--app-text-color);
+                --paper-checkbox-checked-color: var(--app-primary-color);
+                --paper-checkbox-checked-ink-color: var(--app-primary-color);
+            }
+
+            .form {
+                margin-top: -20px;
+                position: relative;
+                height: 100%;
+                @apply --layout-vertical;
+            }
+
+            .layout-horizontal {
+                @apply --layout-horizontal;
+                @apply --layout-justified;
+                margin: 0;
+                width: 100%;
+            }
+
+            .form-comment {
+                @apply --layout-flex;
+            }
+
+            .half {
+                width: 47% !important;
+            }
+
+            #pmenu {
+                width: 100%;
+            }
+
+            #ptimeend {
+                width: 100%;
+            }
+
+            #ptimestart {
+                width: 100%;
+            }
+
+            paper-ripple {
+                color: var(--app-primary-color);
+            }
+
+            .button {
+                cursor: pointer;
+                margin-top: 16px;
+                transition: transform 200ms;
+                width: calc(100% - 4px);
+                height: 40px;
+
+                background-color: var(--app-text-color);
+                color: var(--app-body-color);
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-center-justified;
+            }
+
+            .button-border {
+
+                transition: transform 200ms;
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: 0;
+                top: 20px;
+                width: calc(100% - 4px);
+                height: calc(100% - 16px);
+                background-color: var(--app-primary-color);
+            }
+
+            .button:hover {
+                -webkit-transform: translate(4px, 4px);
+                transform: translate(4px, 4px);
+            }
+
+            .button:hover .button-border {
+
+                -webkit-transform: translate(-4px, -4px);
+                transform: translate(-4px, -4px);
+            }
+
+            .button-label {
+                @apply --paper-font-subhead;
+                font-size: 20px;
+                text-transform: uppercase;
+                font-family: 'Lato', sans-serif;
+                margin-bottom: 4px;
+                font-weight: bold;
+                letter-spacing: 1.5px;
+            }
+
+            .form-actions {
+                position: relative;
+            }
+
+            .loading-box {
+
+                margin-left: -24px;
+                margin-right: 4px;
+                margin-top: 4px;
+                opacity: 0;
+            }
+
+            paper-spinner-lite {
+                width: 20px;
+                height: 20px;
+            }
+
+
+            [hidden] {
+                display: none;
+            }
+
+            [not-valid] {
+                background-color: #AED581 !important;
+            }
+
+            [processing] {
+                pointer-events: none;
+                cursor: auto;
+            }
+
+            [visible] {
+                opacity: 1 !important;
+            }
+        </style>
+
+        <iron-ajax id="ajax" url="http://178.62.212.17/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
+            loading={{loading}} on-response="handleResponse"></iron-ajax>
+
+        <div class="form">
+            <paper-input id="i1" autofocus maxlength="20" char-counter error-message="Это обязательное поле!" value="{{form.name}}" label="Имя и Фамилия"
+                required></paper-input>
+
+            <paper-input maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}" label="Номер телефона"
+                required></paper-input>
+
+            <div class="layout-horizontal" id="ptime">
+                <div class="half">
+                    <paper-dropdown-menu label="Время c" id="ptimestart" value="{{form.time_start}}">
+                        <paper-listbox id="time_start" class="dropdown-content">
+                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 03:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 04:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 04:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 05:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 05:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 06:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 06:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 07:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 07:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 08:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 08:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 09:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 09:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 10:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 10:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 11:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 11:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 12:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 12:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 13:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 13:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 14:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 14:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 15:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 15:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                </div>
+                <div class="half">
+                    <paper-dropdown-menu label="Время до" id="ptimeend" value="{{form.time_end}}">
+                        <paper-listbox id="time_end" class="dropdown-content">
+                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 03:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 04:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 04:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 05:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 05:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 06:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 06:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 07:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 07:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 08:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 08:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 09:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 09:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 10:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 10:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 11:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 11:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 12:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 12:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 13:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 13:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 14:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 14:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 15:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 15:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                </div>
+
+
+            </div>
+            <paper-dropdown-menu id="pmenu" label="Количество гостей" value="{{form.count_people}}">
+                <paper-listbox id="peoples" class="dropdown-content">
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 9 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 10 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 11 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 12 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+
+            <div class="form-comment">
+                <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="200" char-counter></paper-textarea>
+            </div>
+
+            <div class="form-actions">
+                <div>
+                    <div class="button" on-tap="submitForm" processing$="[[loading]]">
+                        <div class="loading-box" visible$="[[loading]]">
+                            <paper-spinner-lite active$="[[loading]]"></paper-spinner-lite>
+
+                        </div>
+                        <div class="button-label">Отправить</div>
+                        <paper-ripple></paper-ripple>
+                    </div>
+                    <div class="button-border" not-valid$="[[!validators.summary]]"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gr-reservation-widget',
+
+            properties: {
+                form: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            name: '',
+                            phone_number: '',
+
+                            time_start: '',
+                            time_end: '',
+                            count_people: '',
+                        }
+                    },
+                },
+
+                validators: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            name: false,
+                            phone_number: false,
+
+                            time_start: false,
+                            time_end: false,
+                            count_people: false,
+                            summary: false,
+                        }
+                    }
+                },
+
+                loading: {
+                    type: Boolean,
+                    value: false,
+                },
+            },
+
+            observers: [
+                '_formNameChanged(form.name)',
+                '_formPhoneChanged(form.phone_number)',
+                '_formTimeStartChanged(form.time_start)',
+                '_formTimeEndChanged(form.time_end)',
+                '_formPeopleChanged(form.count_people)',
+                '_formValid(validators.name, validators.phone_number, validators.count_people, validators.time_start, validators.time_end)',
+            ],
+
+
+
+            _formNameChanged: function (newValue, oldValue) {
+                this.set('validators.name', newValue.length !== 0);
+            },
+
+            _formPhoneChanged: function (newValue, oldValue) {
+                this.set('validators.phone_number', (newValue.length !== 0));
+            },
+
+            _formTimeStartChanged: function (newValue, oldValue) {
+                this.set('validators.time_start', newValue.length !== 0);
+            },
+
+            _formTimeEndChanged: function (newValue, oldValue) {
+                this.set('validators.time_end', newValue.length !== 0);
+            },
+
+            _formPeopleChanged: function (newValue, oldValue) {
+                this.set('validators.count_people', newValue.length !== 0);
+            },
+
+            _formValid: function (name, phone_number, count_people, time_start, time_end) {
+                this.set('validators.summary', (name && phone_number && count_people &&
+                    time_start && time_end));
+            },
+
+
+            _clearForm: function () {
+                this._resetForm();
+            },
+
+            submitForm: function () {
+                if (!this.validators.summary) {
+                    this.fire('gr-form-error');
+                } else {
+                    this.form.date = this.event.date.original;
+                    this.$.ajax.body = JSON.stringify(this.form);
+                    this.$.ajax.generateRequest();
+                }
+
+            },
+
+            handleResponse: function (request) {
+                this.fire('gr-form-send');
+                this._clearForm();
+            },
+
+            _resetForm: function () {
+                this.form = {
+                    name: '',
+                    phone_number: '',
+                    time_start: '',
+                    time_end: '',
+                    count_people: '',
+                };
+                this.$.peoples.selected = null;
+                this.$.time_start.selected = null;
+                this.$.time_end.selected = null;
+
+            },
+
+
+        });
+    </script>
+
+</dom-module>

@@ -1,0 +1,248 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="gr-article">
+
+    <template>
+
+        <style>
+             :host {
+                display: block;
+                margin: 0;
+                height: 100vh;
+                color: var(--app-text-color);
+            }
+
+            [hidden] {
+                display: none;
+            }
+
+            app-header {
+                color: var(--app-body-color);
+                background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+            }
+
+            paper-icon-button {
+                color: var(--app-body-color);
+                --paper-icon-button-ink-color: var(--app-body-color);
+            }
+
+            .content {
+                width: 80%;
+                margin: 54px auto;
+            }
+
+            .article-img {
+                width: 100%;
+                height: 400px;
+                margin-top: -64px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
+
+            .article-title {
+                @apply --paper-font-display1;
+                text-align: center;
+                padding-bottom: 8px;
+            }
+
+            .article-title::before {
+                content: '–';
+                padding-right: 16px;
+            }
+
+            .article-title::after {
+                content: '–';
+                padding-left: 16px;
+            }
+
+            .article-category {
+                margin: 8px;
+                @apply --paper-font-subhead;
+                letter-spacing: 0.7px;
+            }
+
+            .article-date {
+                margin: 8px;
+            }
+
+            .category-border {
+                display: inline-block;
+                border-top: 1px solid var(--app-primary-color);
+                border-bottom: 1px solid var(--app-primary-color);
+            }
+
+            .article-description {
+                margin: 32px auto;
+                width: 80%;
+            }
+
+
+            .layout-horizontal {
+                @apply --layout-horizontal;
+            }
+
+            .layout-vertical {
+                @apply --layout-vertical;
+            }
+
+            .justified-center {
+                @apply --layout-center-justified;
+            }
+
+            @media (max-width: 550px) {
+
+                .article-img {
+
+                    height: 350px;
+                }
+                .article-description {
+
+                    width: 100%;
+                }
+
+                .article-title::before {
+                    content: '';
+                    padding-right: 0;
+                }
+
+                .article-title::after {
+                    content: '';
+                    padding-left: 0;
+                }
+
+                .content {
+                    width: 90%;
+                }
+            }
+
+            @media (max-width: 330px) {
+                .article-img {
+
+                    height: 300px;
+                }
+            }
+        </style>
+
+        <app-route route="[[route]]" pattern="/:article" data="{{articleData}}"></app-route>
+
+        <iron-ajax id="ajax" handle-as="json" on-response="handleResponse"></iron-ajax>
+
+        <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+
+        <app-header-layout id="layout">
+            <app-header id="header" effects="fade-background" reveals>
+                <app-toolbar>
+                    <a href="/news" tabindex="-1">
+                        <paper-icon-button icon="gr-icons:arrow-back"></paper-icon-button>
+                    </a>
+                    <div main-title></div>
+                </app-toolbar>
+            </app-header>
+            <iron-image class="article-img" sizing="cover" fade src="[[article.image.original]]"></iron-image>
+            <div class="content">
+                <div class="article-title">[[article.title]]</div>
+                <div class="layout-horizontal justified-center">
+                    <div class="article-category">
+                        <div class="category-border">[[article.category.name]]</div>
+                    </div>
+                    <div class="article-date">[[article.date.day]] [[article.date.month]]</div>
+                </div>
+                <div class="article-description">
+                    <marked-element markdown="[[article.description]]">
+                        <div class="markdown-html custom"></div>
+                    </marked-element>
+                </div>
+
+            </div>
+        </app-header-layout>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gr-article',
+
+            properties: {
+
+                active: {
+                    type: String,
+                    observer: "_activeChange"
+                }
+            },
+
+            observers: [
+                '_eventPageChanged(articleData.article)',
+            ],
+
+            ready: function () {
+                this.fire('gr-section-change', {
+                    'section': 'news'
+                });
+            },
+
+            _eventPageChanged: function (article) {
+                if (article !== undefined && this.route.prefix === '/article') {
+                    this.$.ajax.url = ['http://178.62.212.17/api/v1/news', article].join('/') + '/';
+                    this.$.ajax.generateRequest();
+                }
+            },
+
+            handleResponse: function (request) {
+                var index, len, date;
+                var response = request.detail.response;
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long',
+                };
+                date = new Date(response.created_at);
+                date = date.toLocaleString("ru", options).split(' ');
+                response.date = {
+                    'weekday': date[0].slice(0, -1),
+                    'day': date[1],
+                    'month': date[2],
+                    'year': date[3],
+                    'original': response.created_at,
+                };
+
+
+                this.article = response;
+
+            },
+
+            _activeChange: function (active) {
+                if (active) {
+                    this.fire('gr-section-change', {
+                        'section': 'news'
+                    });
+                }
+            },
+
+
+
+
+
+        });
+    </script>
+
+</dom-module>

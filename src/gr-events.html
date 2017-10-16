@@ -1,0 +1,318 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="gr-events-item.html">
+
+<dom-module id="gr-events">
+  <template>
+    <style include="shared-styles">
+       :host {
+        display: block;
+        --app-header-color: '';
+        --app-header-image: '';
+      }
+
+      app-header {
+
+        color: var(--app-body-color);
+        --app-header-background-front-layer: {
+          background-image: url(http://178.62.212.17/img/static/headers/events.jpg);
+          background-position: center center;
+        }
+        ;
+      }
+
+      bottom-nav {
+        color: var(--app-body-color);
+        background-color: var(--app-primary-color);
+      }
+
+
+
+      app-toolbar.tall {
+        height: 250px;
+        padding-left: 20px;
+      }
+
+      sample-content {
+        padding-top: 212px;
+      }
+
+      #header {
+        background-position: left center;
+      }
+
+      [main-title] {
+        font-weight: normal;
+        -webkit-transform-origin: center top !important;
+        transform-origin: center top !important;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        font-size: 38px;
+      }
+
+      [main-title] iron-icon {
+        --iron-icon-fill-color: var(--app-body-color);
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      [main-title] .title-label {
+        margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Lato', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
+      }
+
+
+      [condensed-title] {
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        font-size: 20px;
+      }
+
+      [condensed-title] .title-label {
+        font-size: 22px;
+        margin-left: 10px;
+        margin-right: 10px;
+        letter-spacing: 4px;
+        font-family: 'Lato', sans-serif !important;
+        line-height: 34px;
+        @apply --paper-font-title;
+      }
+
+      [condensed-title] iron-icon {
+        --iron-icon-fill-color: var(--app-body-color);
+        --iron-icon-height: 14px;
+        --iron-icon-width: 14px;
+      }
+
+      [condensed-title] i {
+        font-weight: 100;
+        font-style: normal;
+      }
+
+
+
+      app-toolbar {
+        color: var(--app-body-color);
+      }
+
+      .title-label::before {
+        content: '–';
+        padding-left: 16px;
+      }
+
+      .title-label::after {
+        content: '–';
+        padding-right: 16px;
+      }
+
+      .content {
+        display: block;
+        max-width: 1200px;
+        position: relative;
+        margin: 32px auto;
+        padding-top: 16px;
+      }
+
+
+
+
+      @media (max-width: 1450px) {
+
+        app-toolbar.tall {
+          height: 200px;
+        }
+      }
+
+      @media (max-width: 1450px) {
+
+        .content {
+          max-width: 800px;
+        }
+      }
+
+      @media (max-width: 800px) {
+
+        .content {
+          max-width: 645px;
+        }
+      }
+
+      @media (max-width: 660px) {
+
+        .content {
+          max-width: 390px;
+        }
+      }
+
+
+
+      @media (max-width: 410px) {
+        .content {
+          max-width: 338px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .content {
+          max-width: 295px;
+        }
+      }
+
+
+
+
+
+
+
+      @media (max-width: 1050px) {
+        [main-title] {
+          -webkit-transform-origin: center top !important;
+          transform-origin: center top !important;
+          font-size: 30px;
+        }
+        [main-title] .title-label {
+          font-size: 30px;
+          margin-left: 16px;
+          margin-right: 16px;
+          letter-spacing: 2px;
+        }
+        [condensed-title] {
+          margin-left: -36px;
+          font-size: 20px;
+        }
+        [condensed-title] .title-label {
+          font-size: 20px;
+          letter-spacing: 2px;
+        }
+      }
+    </style>
+
+    <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
+
+    <iron-ajax auto handle-as="json" url="http://178.62.212.17/api/v1/events/" on-response="handleResponse"></iron-ajax>
+
+    <app-header-layout>
+
+      <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
+        <app-toolbar>
+          <slot select="[drawer-toggle]"></slot>
+          <div condensed-title>
+
+            <div class="title-label">СОБЫТИЯ</div>
+
+          </div>
+        </app-toolbar>
+        <app-toolbar class="tall">
+          <div main-title>
+
+            <div class="title-label">СОБЫТИЯ</div>
+
+          </div>
+        </app-toolbar>
+      </app-header>
+
+      <div class="content">
+        <template is="dom-repeat" items="[[events]]" as="event">
+          <gr-events-item class="event" event="[[event]]"></gr-events-item>
+        </template>
+      </div>
+
+
+    </app-header-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gr-events',
+
+      properties: {
+        active: {
+          type: String,
+          observer: "_activeChange"
+        }
+      },
+
+      ready: function () {
+
+
+        this.fire('gr-section-change', {
+          'section': 'events'
+        });
+
+        if (this.middleScreen) {
+
+          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
+        } else {
+          this.$.header.style['backgroundColor'] = '#8BC34A';
+
+
+        }
+      },
+
+      _activeChange: function (active) {
+        if (active) {
+          this.fire('gr-section-change', {
+            'section': 'events'
+          });
+        }
+      },
+
+
+
+      handleResponse: function (request) {
+        var response = request.detail.response;
+        var index, len, date, options;
+
+        options = {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+        };
+
+        for (index = 0, len = response.length; index < len; ++index) {
+          date = new Date(response[index].date);
+          date = date.toLocaleString("ru", options).split(/ |,|\./g);
+          if (response[index].time !== null) {
+            response[index].time = response[index].time.slice(0, -3);
+          }
+
+          response[index].date = {
+            'weekday': date[0],
+            'day': date[2],
+            'month': date[3],
+            'original': response[index].date,
+          };
+
+        };
+        this.events = response;
+      },
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,292 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="gr-albums">
+  <template>
+    <style include="app-grid-style">
+       :host {
+        display: block;
+        --app-grid-columns: 3;
+        --app-grid-gutter: 16px;
+        --app-grid-expandible-item-columns: 3;
+        --paper-icon-button-ink-color: var(--app-body-color);
+      }
+
+      .centered-container {
+        max-width: 94%;
+        margin: 40px auto;
+       
+      }
+
+      .item {
+        height: 300px;
+        position: relative;
+        background-color: var(--app-body-color);
+        background-size: cover;
+        background-position: center center;
+        transition: transform 200ms;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        
+      }
+
+      .item-border {
+        transition: transform 200ms;
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: -4px;
+                width: 100%;
+                height: 100%;
+                background-color: var(--app-primary-color);
+            }
+
+        
+
+      .item:nth-child(5n + 1) {
+        height: 400px;
+        @apply --app-grid-expandible-item;
+      }
+
+      .item:nth-child(5n + 1) .item-title {
+       font-size: 22px;
+      }
+
+      .item:nth-child(5n + 1) .event-name {
+       font-size: 32px;
+      }
+
+      .item:nth-child(5n + 1) .title-count {
+       font-size: 24px;
+      }
+
+      .item:nth-child(5n + 1) .count-icon {
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+      }
+
+      paper-ripple {
+               color: var(--app-primary-color);
+            }
+
+      .link {
+        text-decoration: none;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 1;
+      }
+
+      .item-horizontal {
+        @apply --layout-flex;
+        @apply --layout-horizontal;
+      }
+
+      .item-title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 100%);
+        color: var(--app-body-color);
+        font-weight: 400;
+        padding: 24px 16px 16px 16px;
+        
+        @apply --paper-font-subhead;
+      }
+
+      .title-event {
+        @apply --layout-flex;
+        @apply --layout-vertical;
+      }
+
+      .event-name {
+        @apply --paper-font-headline;
+      }
+
+      .title-count {
+        float: right;
+        align-self: flex-end;
+        @apply --paper-font-title;
+        font-weight: normal;
+        margin-left: 6px;
+      }
+
+      .count-icon {
+        --iron-icon-height: 21px;
+        --iron-icon-width: 21px;
+        margin-bottom: 2px;
+        margin-right: 4px;
+      }
+
+      @media(max-width: 768px) {
+        :host {
+          --app-grid-columns: 2;
+          --app-grid-gutter: 5px;
+          --app-grid-item-height: 200px;
+          --app-grid-expandible-item-columns: 2;
+        }
+
+        .centered-container {
+          margin: 10px 5px;
+        }
+
+        .item:nth-child(5n + 1) {
+        height: 300px;
+        @apply --app-grid-expandible-item;
+      }
+
+      .item:nth-child(5n + 1) .item-title {
+       font-size: 20px;
+      }
+
+      .item:nth-child(5n + 1) .event-name {
+       font-size: 28px;
+      }
+
+      .item:nth-child(5n + 1) .title-count {
+       font-size: 22px;
+      }
+
+      .item:nth-child(5n + 1) .count-icon {
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+      }
+
+         
+
+        
+      }
+
+      @media(max-width: 550px) {
+        :host {
+          --app-grid-columns: 1;
+          --app-grid-gutter: 5px;
+          --app-grid-item-height: 200px;
+          --app-grid-expandible-item-columns: 1;
+        }
+
+        .item:nth-child(5n + 1) {
+        height: 300px;
+        @apply --app-grid-expandible-item;
+      }
+
+      .item:nth-child(5n + 1) .item-title {
+       font-size: 16px;
+      }
+
+      .item:nth-child(5n + 1) .event-name {
+       font-size: 24px;
+      }
+
+      .item:nth-child(5n + 1) .title-count {
+       font-size: 20px;
+      }
+
+      .item:nth-child(5n + 1) .count-icon {
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+      }
+
+       
+
+         
+
+        
+      }
+
+      
+    </style>
+
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+    <iron-ajax auto handle-as="json" url="http://178.62.212.17/api/v1/albums/" on-response="handleResponse"></iron-ajax>
+
+    <div class="centered-container">
+      <div class="app-grid">
+        <template is="dom-repeat" items="[[albums]]" as="album">
+          
+          <div class="item" style$="background-image: url([[album.poster]]);">
+            
+            <a class="link" href="/album/[[album.pk]]"></a>
+            <div class="item-title">
+              <div class="item-horizontal">
+                <div class="title-event">
+                  <div class="event-date">
+                    [[album.event.date.day]] [[album.event.date.month]]
+                  </div>
+                  <div class="event-name">
+                    [[album.event.name]]
+                  </div>
+                </div>
+                <div class="title-count">
+                  <iron-icon class="count-icon" icon="gr-icons:photo-camera"></iron-icon>  [[album.image_count]]
+                </div>
+              </div>
+            </div>
+            <paper-ripple></paper-ripple>    
+          </div>
+
+        </template>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gr-albums',
+
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+
+      attached: function () {
+        this._updateGridStyles = this._updateGridStyles || function () {
+          this.updateStyles();
+        }.bind(this);
+        window.addEventListener('resize', this._updateGridStyles);
+      },
+
+      detached: function () {
+        window.removeEventListener('resize', this._updateGridStyles);
+      },
+
+      handleResponse: function (request) {
+        var response = request.detail.response;
+        var index, len, date, poster;
+        var domain = 'http://178.62.212.17'
+        var options = {
+          month: 'long',
+          day: 'numeric',
+        };
+        for (index = 0, len = response.length; index < len; ++index) {
+          poster = this.smallScreen ? response[index].main_image.thumbnail : response[index].main_image.original;
+          response[index].poster = domain + poster;
+          date = new Date(response[index].event.date);
+          date = date.toLocaleString("ru", options).split(' ');
+          response[index].event.date = {
+            'day': date[0],
+            'month': date[1],
+            'original': response[index].event.date,
+          };
+
+        };
+        this.albums = response;
+      },
+    });
+  </script>
+</dom-module>

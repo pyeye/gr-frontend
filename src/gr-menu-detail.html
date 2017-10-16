@@ -1,0 +1,426 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
+<dom-module id="gr-menu-detail">
+
+    <template>
+
+        <style>
+             :host {
+                display: inline-block;
+                --iron-icon-fill-color: #E53935;
+                --iron-icon-height: 20px;
+                --iron-icon-width: 20px;
+                width: 95%;
+                margin: 16px;
+                margin-bottom: 40px;
+                color: var(--app-text-color);
+            }
+
+            paper-ripple {
+                color: var(--app-text-color);
+            }
+
+            .content {
+                @apply --layout-vertical;
+            }
+
+            .menu-category {
+                position: relative;
+                display: inline-block;
+                padding-left: 4px;
+                margin-bottom: 4px;
+            }
+
+            .category-name {
+                @apply --paper-font-headline;
+                text-transform: uppercase;
+                font-size: 28px;
+                font-weight: 500;
+                font-style: normal;
+                letter-spacing: .5px;
+                font-family: 'Lato', sans-serif;
+                line-height: 30px;
+            }
+
+            .category-cover {
+                z-index: -1;
+                position: absolute;
+                top: -.1em;
+                left: 0;
+                width: calc(100% - 4px);
+                height: 45%;
+                background-color: var(--app-primary-color);
+            }
+
+
+
+            .menu-list {
+                @apply --layout-vertical;
+            }
+
+            .list-item {
+                @apply --layout-vertical;
+                margin-top: 16px;
+            }
+
+            .item-row {
+                @apply --layout-horizontal;
+                @apply --layout-end;
+            }
+
+            .item-name {
+                @apply --paper-font-headline;
+                font-size: 22px;
+                line-height: 1.2;
+            }
+
+            .item-flex {
+                @apply --layout-flex;
+                border-bottom: 1px dotted var(--app-text-color);
+            }
+
+            .item-price {
+                @apply --layout-horizontal;
+                margin-bottom: -4px;
+            }
+
+            .item-description {
+                @apply --layout-flex;
+                margin-top: 4px;
+                margin-right: 6px;
+                @apply --paper-font-body1;
+                opacity: 0.8;
+            }
+
+            .price-value-box {
+                @apply --layout-horizontal;
+                
+            }
+
+            .price-value {
+                @apply --paper-font-headline;
+                
+                min-width: 60.86px;
+            }
+
+            .price-value:not(:last-of-type):after {
+                content: "/";
+                margin: 0 2px;
+            }
+
+            .price-value:nth-last-of-type(2):before {
+                content: none;
+            }
+
+            .price-measure-box {
+                @apply --layout-horizontal;
+                
+                @apply --layout-self-start;
+            }
+
+            .price-measure {
+                @apply --paper-font-subhead;
+                font-size: 14px;
+                opacity: 0.8;
+                @apply --layout-horizontal;
+                min-width: 60.86px;
+               
+            }
+
+            .price-measure:not(:last-of-type):after {
+                content: "/";
+                margin: 0 2px;
+            }
+
+            .price-measure:nth-last-of-type(2):before {
+                content: none;
+            }
+
+            .category-expend {
+                display: none;
+                position: absolute;
+                right: 16px;
+                top: 25%;
+
+                --iron-icon-height: 20px;
+                --iron-icon-width: 20px;
+                color: var(--app-text-color);
+                --iron-icon-fill-color: var(--app-text-color);
+            }
+
+            .content-menu {
+                position: relative;
+            }
+
+
+
+
+
+
+
+
+            [hidden] {
+                display: none;
+            }
+
+            @media (max-width: 768px) {
+
+                 :host {
+                    margin: 0;
+                }
+
+                .content-menu {
+                    cursor: pointer;
+                    padding: 8px 0;
+                    background-color: var(--app-primary-color);
+                    text-align: center;
+                    border-bottom: 1px solid var(--app-text-color);
+                }
+                .menu-list {
+                    display: none;
+                }
+
+                .list-item {
+
+                    margin: 16px;
+                }
+
+                .category-expend {
+                    display: block;
+                }
+            }
+
+            @media (max-width: 550px) {
+
+                 :host {
+
+
+                    width: 100%;
+                }
+
+                .category-name {
+
+                    font-size: 22px;
+                    line-height: 24px;
+                }
+
+                .item-name {
+
+                    font-size: 18px;
+                }
+
+                .category-cover {
+                    top: 0;
+                    height: 40%;
+                }
+
+                .price-value {
+
+                    font-size: 20px;
+                }
+
+
+
+                .menu-category {
+                    margin-bottom: 0;
+                }
+                .price-value {
+
+                    font-size: 18px;
+                    min-width: 46px;
+                }
+
+                .price-measure {
+                    min-width: 46px;
+            }
+            }
+
+            @media (max-width: 330px) {
+                .category-name {
+
+                    font-size: 20px;
+                }
+            }
+        </style>
+
+        <iron-media-query query="max-width: 768px" query-matches="{{smallScreen}}"></iron-media-query>
+
+        <div class="content">
+            <div class="content-menu" on-tap="_tapHandler" id="category">
+                <div class="menu-category">
+                    <div class="category-cover"></div>
+                    <div class="category-name">[[menu.category.name]]</div>
+
+                </div>
+                <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+                <iron-icon id="arrow" class="category-expend" icon="[[expandIcon]]"></iron-icon>
+            </div>
+
+            <div class="menu-list" id="list">
+                <template is="dom-repeat" items="[[menu.items]]">
+                    <div class="list-item">
+                        <div class="item-row">
+                            <div class="item-name">[[item.name]]
+                                <iron-icon class="hot-icon" icon="gr-icons:hot" hidden$="[[_hideIcon(item)]]"></iron-icon>
+                            </div>
+                            <div class="item-flex" hidden$="[[_hidePrice()]]"></div>
+                            <div class="item-price" hidden$="[[_hidePrice()]]">
+                                
+                                <div class="price-value-box">
+                                    <template is="dom-repeat" items="[[item.prices]]" as="price">
+                                        <div class="price-value">[[price.value]] &#x20bd;</div>
+                                    </template>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-description">[[item.description]]</div>
+                            <div class="price-measure-box">
+                                <template is="dom-repeat" items="[[item.prices]]" as="price">
+                                    <div class="price-measure">[[price.count]] [[price.measure]]</div>
+                                </template>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </template>
+            </div>
+        </div>
+
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gr-menu-detail',
+
+            properies: {
+
+                menu: Object,
+
+
+                expandIcon: {
+                    type: String,
+                    value: 'gr-icons:expand-more',
+                }
+            },
+
+            ready: function () {
+                this.expandIcon = 'gr-icons:expand-more';
+                if (this.smallScreen && this.group === 'breakfast' && this.menu.category.code ===
+                    'breakfast_main') {
+                    this.$.list.style.display = 'block';
+                    this.$.category.style.pointerEvents = 'none';
+                    this.$.arrow.style.display = 'none';
+                }
+
+
+            },
+
+
+            _hidePrice: function () {
+                return (this.group === 'lunch');
+            },
+
+            _hideDescription: function (description) {
+                return (description.length == 0);
+            },
+
+            _hideIcon: function (item) {
+                return !item.is_fire;
+            },
+
+            _tapHandler: function (e) {
+                if (this.smallScreen) {
+                    this._toggleList();
+                }
+
+
+            },
+
+            _getHeight: function (el) {
+                var el_style = window.getComputedStyle(el),
+                    el_display = el_style.display,
+                    el_position = el_style.position,
+                    el_visibility = el_style.visibility,
+                    el_max_height = el_style.maxHeight.replace('px', '').replace('%', ''),
+
+                    wanted_height = 0;
+
+
+                // if its not hidden we just return normal height
+                if (el_display !== 'none' && el_max_height !== '0') {
+                    return el.offsetHeight;
+                }
+
+                // the element is hidden so:
+                // making the el block so we can meassure its height but still be hidden
+                el.style.position = 'absolute';
+                el.style.visibility = 'hidden';
+                el.style.display = 'block';
+
+                wanted_height = el.offsetHeight;
+
+                // reverting to the original values
+                el.style.display = el_display;
+                el.style.position = el_position;
+                el.style.visibility = el_visibility;
+
+                return wanted_height;
+            },
+
+            _toggleList: function () {
+                var el = this.$.list;
+                var el_max_height = 0;
+
+                if (el.getAttribute('data-max-height')) {
+
+                    // we've already used this before, so everything is setup
+                    if (el.style.maxHeight.replace('px', '').replace('%', '') === '0') {
+                        el.style.maxHeight = el.getAttribute('data-max-height');
+
+                        this.expandIcon = 'gr-icons:expand-less';
+                    } else {
+                        this.expandIcon = 'gr-icons:expand-more';
+                        el.style.maxHeight = '0';
+                    }
+                } else {
+                    el_max_height = this._getHeight(el) + 'px';
+                    el.style['transition'] = 'max-height 0.4s ease-in-out';
+                    el.style.overflowY = 'hidden';
+                    el.style.maxHeight = '0';
+                    el.setAttribute('data-max-height', el_max_height);
+                    el.style.display = 'block';
+                    this.expandIcon = 'gr-icons:expand-less';
+
+                    // we use setTimeout to modify maxHeight later than display (to we have the transition effect)
+                    setTimeout(function () {
+                        el.style.maxHeight = el_max_height;
+                    }, 10);
+                }
+            },
+
+
+
+
+        });
+    </script>
+
+</dom-module>

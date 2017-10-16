@@ -1,0 +1,926 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-container.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-error.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="gr-reservation">
+  <template>
+    <style include="shared-styles">
+       :host {
+        display: block;
+        --paper-spinner-color: var(--app-body-color);
+        --iron-icon-fill-color: var(--app-text-color);
+        --paper-toast-background-color: var(--app-accent-color);
+        --paper-input-container-color: var(--app-text-color);
+        --paper-input-container-focus-color: var(--app-primary-color);
+        --paper-input-container-input-color: var(--app-text-color);
+        --paper-checkbox-label-color: var(--app-text-color);
+        --paper-checkbox-unchecked-color: var(--app-text-color);
+        --paper-checkbox-unchecked-ink-color: var(--app-text-color);
+        --paper-checkbox-checked-color: var(--app-primary-color);
+        --paper-checkbox-checked-ink-color: var(--app-primary-color);
+      }
+
+      [visible] {
+        opacity: 1 !important;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .content {
+        width: 60%;
+        margin: 16px auto;
+      }
+
+      .form {
+        margin-top: 84px;
+        @apply --layout-vertical;
+      }
+
+      .form-main {
+        @apply --layout-horizontal;
+        @apply --layout-justified;
+        @apply --layout-wrap;
+      }
+
+      .form-personal {
+        width: 48%;
+      }
+
+      .form-reservation {
+        width: 48%;
+      }
+
+      .form-comment {
+        margin-top: 16px;
+        width: 100%;
+      }
+
+      .form-title {
+        @apply --paper-font-headline;
+        font-size: 20px;
+        color: var(--app-text-color);
+        margin-bottom: 16px;
+      }
+
+      .layout-vertical {
+        @apply --layout-vertical;
+      }
+
+      .layout-horizontal {
+        @apply --layout-horizontal;
+      }
+
+      app-header {
+        z-index: 0 !important;
+        color: #FFFFFF;
+        --app-header-background-front-layer: {
+          background-image: url(http://178.62.212.17/img/static/headers/reservation.jpg);
+          background-position: center bottom;
+        }
+        ;
+      }
+
+      bottom-nav {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+
+
+
+      app-toolbar.tall {
+        height: 250px;
+        padding-left: 20px;
+      }
+
+      sample-content {
+        padding-top: 212px;
+      }
+
+      #header {
+        background-position: left center;
+      }
+
+      [main-title] {
+        font-weight: normal;
+        -webkit-transform-origin: center top !important;
+        transform-origin: center top !important;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        font-size: 38px;
+      }
+
+      [main-title] iron-icon {
+        --iron-icon-fill-color: #FFFFFF;
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      [main-title] .title-label {
+        margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Lato', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
+      }
+
+
+      [condensed-title] {
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        font-size: 20px;
+      }
+
+      [condensed-title] .title-label {
+        font-size: 22px;
+        margin-left: 10px;
+        margin-right: 10px;
+        letter-spacing: 4px;
+        font-family: 'Lato', sans-serif !important;
+        line-height: 34px;
+        @apply --paper-font-title;
+      }
+
+      [condensed-title] iron-icon {
+        --iron-icon-fill-color: #FFFFFF;
+        --iron-icon-height: 14px;
+        --iron-icon-width: 14px;
+      }
+
+      [condensed-title] i {
+        font-weight: 100;
+        font-style: normal;
+      }
+
+
+
+      app-toolbar {
+        color: var(--app-body-color);
+      }
+
+      .title-label::before {
+        content: '–';
+        padding-left: 16px;
+      }
+
+      .title-label::after {
+        content: '–';
+        padding-right: 16px;
+      }
+
+      #i1 {
+        flex-basis: 49%;
+        max-width: 49%;
+        margin-bottom: 16px;
+      }
+
+      #phone {
+        flex-basis: 49%;
+        max-width: 49%;
+        margin-bottom: 16px;
+      }
+
+      #date {
+        flex-basis: 24%;
+        max-width: 24%;
+      }
+
+      #ptime {
+        flex-basis: 24%;
+        max-width: 24%;
+      }
+
+      #ptimeend {
+        flex-basis: 24%;
+        max-width: 24%;
+      }
+
+
+
+      #pmenu {
+        flex-basis: 24%;
+        max-width: 24%;
+      }
+
+
+
+
+
+
+
+      .action-bar {
+        @apply --layout-horizontal;
+        @apply --layout-end-justified;
+        margin-top: 24px;
+        margin-bottom: 24px;
+      }
+
+      .secondary-actions {
+        @apply --layout-horizontal;
+      }
+
+      .loading-box {
+
+
+
+        margin-left: -32px;
+        margin-right: 8px;
+        margin-top: 4px;
+        opacity: 0;
+      }
+
+      paper-spinner-lite {
+        width: 24px;
+        height: 24px;
+      }
+
+      paper-button iron-icon {
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
+        --iron-icon-fill-color: var(--app-body-color);
+        margin-bottom: 2px;
+      }
+
+      paper-button {
+        background: var(--app-text-color);
+        color: var(--app-body-color);
+      }
+
+      .form-errors {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        @apply --paper-font-subhead;
+        color: var(--app-error-color);
+        font-size: 16px;
+        opacity: 0;
+        text-transform: uppercase;
+        font-weight: bold;
+
+        letter-spacing: 1px;
+      }
+
+      .cancel {
+        margin-right: 3px;
+      }
+
+      paper-button.cancel {
+        background: var(--app-primary-color);
+      }
+
+      paper-button.reset {
+        background: #3F51B5;
+      }
+
+
+
+
+
+      .secondary-btn {
+        width: 50%;
+      }
+
+      .reset {
+        margin-left: 3px;
+      }
+
+      .secondary-actions {
+        width: 95%;
+        margin: 0 auto;
+      }
+
+      .button {
+        cursor: pointer;
+        margin-top: 16px;
+        transition: transform 200ms;
+        width: calc(100% - 4px);
+        height: 40px;
+
+        background-color: var(--app-text-color);
+        color: var(--app-body-color);
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+      }
+
+      .button-border {
+
+        transition: transform 200ms;
+        z-index: -1;
+        position: absolute;
+        bottom: -4px;
+        right: 0;
+
+        width: calc(100% - 4px);
+        height: calc(100% - 16px);
+        background-color: var(--app-primary-color);
+      }
+
+      .button:hover {
+        -webkit-transform: translate(4px, 4px);
+        transform: translate(4px, 4px);
+      }
+
+      .button:hover .button-border {
+
+        -webkit-transform: translate(-4px, -4px);
+        transform: translate(-4px, -4px);
+      }
+
+      .button-label {
+        @apply --paper-font-subhead;
+        font-size: 20px;
+        text-transform: uppercase;
+        font-family: 'Lato', sans-serif;
+        margin-bottom: 4px;
+        font-weight: bold;
+        letter-spacing: 1.5px;
+      }
+
+      .form-actions {
+        position: relative;
+        width: 35%;
+      }
+
+
+
+
+
+      [not-valid] {
+        background-color: #455A64;
+      }
+
+      [processing] {
+        pointer-events: none;
+        cursor: auto;
+      }
+
+      @media (max-width: 1450px) {
+        .content {
+          width: 70%;
+        }
+      }
+
+      @media (max-width: 1050px) {
+
+
+
+        [main-title] {
+          -webkit-transform-origin: center top !important;
+          transform-origin: center top !important;
+          font-size: 30px;
+        }
+        [main-title] .title-label {
+          font-size: 30px;
+          margin-left: 16px;
+          margin-right: 16px;
+          letter-spacing: 2px;
+        }
+        [condensed-title] {
+          margin-left: -36px;
+          font-size: 20px;
+        }
+        [condensed-title] .title-label {
+          font-size: 20px;
+          letter-spacing: 2px;
+        }
+
+
+
+        app-toolbar.tall {
+          height: 250px;
+          padding-left: 20px;
+        }
+
+        .content {
+          width: 80%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        app-header {
+          z-index: 1 !important;
+        }
+
+        #i1 {
+          flex-basis: 100%;
+          max-width: 100%;
+          margin-bottom: 0;
+        }
+
+        #phone {
+          flex-basis: 100%;
+          max-width: 100%;
+          margin-bottom: 0;
+        }
+
+        #date {
+          flex-basis: 100%;
+          max-width: 100%;
+        }
+
+        #ptime {
+          flex-basis: 48%;
+          max-width: 48%;
+        }
+
+        #ptimeend {
+          flex-basis: 48%;
+          max-width: 48%;
+        }
+
+
+
+        #pmenu {
+          flex-basis: 100%;
+          max-width: 100%;
+        }
+
+        .form {
+          margin-top: 48px;
+        }
+
+        .content {
+          width: 90%;
+        }
+
+        .form-actions {
+
+          width: 100%;
+        }
+      }
+
+
+
+      @media (max-width: 550px) {
+
+        app-toolbar.tall {
+          height: 150px;
+        }
+
+        app-header {
+
+          --app-header-background-front-layer: {
+            background-image: url(http://178.62.212.17/img/static/headers/reservation.jpg);
+            background-position: center center;
+          }
+        }
+
+        [main-title] {
+
+          font-size: 24px;
+        }
+        [main-title] .title-label {
+          font-size: 24px;
+
+          letter-spacing: 1px;
+        }
+        [condensed-title] {
+
+          font-size: 16px;
+        }
+        [condensed-title] .title-label {
+          font-size: 16px;
+          letter-spacing: 1px;
+        }
+
+        .action-bar {
+          margin-top: 16px;
+          margin-bottom: 48px;
+        }
+      }
+    </style>
+
+    <iron-ajax id="ajax" url="http://178.62.212.17/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
+      loading={{loading}} on-response="handleResponse"></iron-ajax>
+    <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
+    <app-header-layout>
+
+      <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
+        <app-toolbar>
+          <slot select="[drawer-toggle]"></slot>
+          <div condensed-title>
+
+            <div class="title-label">БРОНИРОВАНИЕ</div>
+
+          </div>
+        </app-toolbar>
+        <app-toolbar class="tall">
+          <div main-title>
+
+            <div class="title-label">БРОНИРОВАНИЕ</div>
+
+          </div>
+        </app-toolbar>
+      </app-header>
+
+      <div class="content">
+        <div class="form">
+          <div class="form-main">
+
+
+            <paper-input id="i1" autofocus maxlength="20" char-counter error-message="Это обязательное поле!" value="{{form.name}}" label="Имя и Фамилия"
+              required></paper-input>
+
+
+
+            <paper-input id="phone" maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}"
+              label="Номер телефона" required></paper-input>
+
+
+
+            <vaadin-date-picker id="date" value="{{form.date}}" label="Дата" i18n="[[i18n]]"></vaadin-date-picker>
+
+
+            <paper-dropdown-menu id="ptime" label="Время c" value="{{form.time_start}}">
+              <paper-listbox id="time_start" class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 03:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 04:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 04:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 05:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 05:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 06:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 06:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 07:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 07:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 08:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 08:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 09:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 09:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 10:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 10:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 11:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 11:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 12:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 12:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 13:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 13:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 14:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 14:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 15:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 15:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            <paper-dropdown-menu label="Время до" id="ptimeend" value="{{form.time_end}}">
+              <paper-listbox id="time_end" class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 03:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 04:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 04:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 05:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 05:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 06:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 06:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 07:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 07:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 08:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 08:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 09:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 09:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 10:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 10:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 11:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 11:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 12:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 12:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 13:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 13:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 14:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 14:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 15:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 15:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+            <paper-dropdown-menu id="pmenu" label="Количество гостей" value="{{form.count_people}}">
+              <paper-listbox id="peoples" class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 9 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 10 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 11 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 12 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+
+          </div>
+
+          <div class="form-comment">
+            <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="200" char-counter></paper-textarea>
+          </div>
+
+          <div class="action-bar">
+            <div class="form-actions">
+              <div>
+                <div class="button" on-tap="submitForm" processing$="[[loading]]" not-valid$="[[!validators.summary]]">
+                  <div class="loading-box" visible$="[[loading]]">
+                    <paper-spinner-lite active$="[[loading]]"></paper-spinner-lite>
+                  </div>
+                  <div class="button-label">Отправить</div>
+
+                </div>
+                <div class="button-border"></div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+    </app-header-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gr-reservation',
+
+      properties: {
+        form: {
+          type: Object,
+          value: function () {
+            return {
+              name: '',
+              phone_number: '',
+              date: '',
+              time_start: '',
+              time_end: '',
+              count_people: '',
+            }
+          },
+        },
+
+        validators: {
+          type: Object,
+          value: function () {
+            return {
+              name: false,
+              phone_number: false,
+              date: false,
+              time_start: false,
+              time_end: false,
+              count_people: false,
+              summary: false,
+            }
+          }
+        },
+
+        errors: {
+          type: Boolean,
+          value: false,
+        },
+
+
+
+        loading: {
+          type: Boolean,
+          value: false,
+        },
+
+        i18n: {
+          type: Object,
+          readonly: true,
+          value: function () {
+            return {
+              monthNames: [
+                'Январь', 'Февраль', 'Март', 'Апрель', 'Май',
+                'Июнь', 'Июль', 'Август', 'Сентябрь',
+                'Октябрь', 'Ноябрь', 'Декабрь'
+              ],
+              weekdaysShort: [
+                'Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'
+              ],
+              weekdays: [
+                'Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'
+              ],
+              firstDayOfWeek: 1,
+              today: 'Сегодня',
+              cancel: 'Отмена',
+              formatDate: function (d) {
+                var options = {
+                  month: 'long',
+                  day: 'numeric',
+                };
+                var local = d.toLocaleString("ru", options).split(' ');
+                var date = d.getDate();
+                var year = this.smallScreen ? d.getFullYear() : '';
+                if (date < 10) {
+                  date = '0' + date;
+                }
+                return [date, local[1], year].join(' ');
+              },
+              formatTitle: function (monthName, fullYear) {
+                return monthName + ' ' + fullYear;
+              },
+            }
+          },
+        },
+      },
+
+      observers: [
+        '_formNameChanged(form.name)',
+        '_formDateChanged(form.date)',
+        '_formPhoneChanged(form.phone_number)',
+        '_formTimeStartChanged(form.time_start)',
+        '_formTimeEndChanged(form.time_end)',
+        '_formPeopleChanged(form.count_people)',
+        '_formValid(validators.name, validators.date, validators.phone_number, validators.count_people, validators.time_start, validators.time_end)',
+        '_formValidSummary(validators.summary)',
+      ],
+
+      _formTimeInitial: function (newValue, oldValue) {
+        this.set('form.time', newValue);
+      },
+
+      _formNameChanged: function (newValue, oldValue) {
+        this.set('validators.name', newValue.length !== 0);
+      },
+
+      _formDateChanged: function (newValue, oldValue) {
+        this.set('validators.date', (newValue.length !== 0));
+      },
+
+      _formPhoneChanged: function (newValue, oldValue) {
+        this.set('validators.phone_number', (newValue.length !== 0));
+      },
+
+      _formTimeStartChanged: function (newValue, oldValue) {
+        this.set('validators.time_start', newValue.length !== 0);
+      },
+
+      _formTimeEndChanged: function (newValue, oldValue) {
+        this.set('validators.time_end', newValue.length !== 0);
+      },
+
+      _formPeopleChanged: function (newValue, oldValue) {
+        this.set('validators.count_people', newValue.length !== 0);
+      },
+
+      _formValid: function (name, date, phone_number, count_people, time_start, time_end) {
+        this.set('validators.summary', (name && date && phone_number && count_people && time_start &&
+          time_end));
+      },
+
+      _formValidSummary: function (validSummary) {
+        if (validSummary && this.errors) {
+          this.errors = false;
+        }
+      },
+
+
+      _clearForm: function () {
+        this.errors = false;
+        this._resetForm();
+      },
+
+      _closeButtonHandler: function () {
+        this.fire('close-form');
+      },
+
+      submitForm: function () {
+        if (!this.validators.summary) {
+          this.fire('gr-form-error');
+        } else {
+
+          this.$.ajax.body = JSON.stringify(this.form);
+          this.$.ajax.generateRequest();
+        }
+
+      },
+
+      handleResponse: function (request) {
+        this.fire('gr-form-send');
+        this._clearForm();
+      },
+
+      _isEmpty: function (obj) {
+        for (var key in obj) {
+          if (hasOwnProperty.call(obj, key)) return false;
+        }
+
+        return true;
+      },
+
+      _resetForm: function () {
+
+        this.form = {
+          name: '',
+          phone_number: '',
+          date: '',
+          time_start: '',
+          time_end: '',
+
+          count_people: '',
+        };
+        this.$.peoples.selected = null;
+        this.$.time_start.selected = null;
+        this.$.time_end.selected = null;
+
+      },
+
+      ready: function () {
+        if (this.middleScreen) {
+
+          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
+        } else {
+          this.$.header.style['backgroundColor'] = '#8BC34A';
+        }
+      },
+
+
+
+    });
+  </script>
+</dom-module>

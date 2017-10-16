@@ -1,0 +1,215 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="gr-about-tour">
+    <template>
+        <style include="shared-styles">
+             :host {
+                display: block;
+                color: black;
+            }
+
+            a {
+                cursor: pointer;
+                text-decoration: none;
+                color: var(--app-body-color);
+            }
+
+            iron-icon {
+                --iron-icon-fill-color: var(--app-body-color);
+                ;
+                --iron-icon-height: 24px;
+                --iron-icon-width: 24px;
+            }
+
+
+
+            .centered-container {
+                max-width: 94%;
+                margin: 40px auto;
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                padding-top: 8px;
+                
+            }
+
+            .box {
+                position: relative;
+                width: 23%;
+                display: inline-block;
+                padding-right: 4px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                margin: 8px;
+                
+            }
+
+            .box:before {
+                content: "";
+                display: block;
+                padding-top: 100%;
+                /* initial ratio of 1:1*/
+            }
+
+            .item {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                
+            }
+
+            .item-border {
+         
+                z-index: -1;
+                position: absolute;
+                bottom: -4px;
+                right: -4px;
+                width: 100%;
+                height: 100%;
+                background-color: var(--app-primary-color);
+            }
+
+            .text {
+                width: 60%;
+            }
+
+
+
+            .item-image {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+
+            .item-title {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                padding: 8px;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.95) 100%);
+                color: var(--app-body-color);
+                padding-top: 16px;
+                font-weight: 400;
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            .title-owner {
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-flex;
+                padding-right: 16px;
+            }
+
+            .owner-link {
+                height: 40px;
+            }
+
+            .owner-avatar {
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+
+            .owner-username {
+                color: var(--app-body-color);
+                ;
+            }
+
+            .title-likes {
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            .likes-count {
+                padding-left: 10px;
+            }
+
+            @media (max-width: 1450px) {
+
+                .centered-container {
+                max-width: 100%;
+                
+            }
+                .box {
+                margin: 4px;
+                width: 31%;
+              
+                
+            }
+
+            }
+
+            @media (max-width: 768px) {
+
+                .centered-container {
+                max-width: 100%;
+                
+            }
+                .box {
+                margin: 4px;
+                width: 47%;
+              
+                
+            }
+
+            }
+
+            @media (max-width: 550px) {
+
+                .centered-container {
+                max-width: 95%;
+                
+            }
+
+                .box {
+                margin: 8px;
+                width: 98%;
+              
+                
+            }
+
+            }
+
+
+        </style>
+
+        
+
+        <div class="centered-container">
+
+
+           тур
+
+
+
+            
+        </div>
+
+
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'gr-about-tour',
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,262 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+
+<link rel="import" href="gr-menu-detail.html">
+
+
+<dom-module id="gr-menu-list">
+
+  <template>
+
+    <style>
+       :host {
+        @apply --layout-horizontal;
+        height: 100vh;
+        width: 95%;
+        position: relative;
+        margin: 32px auto;
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+      [fixed] {
+        position: fixed !important;
+        top: 56px;
+      }
+
+      .main {
+        @apply --layout-flex;
+        padding: 16px;
+      }
+
+      .info {
+
+        padding: 16px;
+        width: 270px;
+      }
+
+      #nav {
+        color: var(--app-text-color);
+        @apply --paper-font-subhead;
+        margin-top: 16px;
+      }
+
+      .nav-category {
+        position: relative;
+        display: inline-block;
+        padding-left: 4px;
+        margin-bottom: 16px;
+      }
+
+      .category-cover {
+        z-index: -1;
+        position: absolute;
+        top: .1em;
+        left: 0;
+        width: calc(100% - 4px);
+        height: 45%;
+        background-color: var(--app-primary-color);
+      }
+
+      .category-name {
+        @apply --paper-font-headline;
+
+        font-size: 24px;
+        font-weight: 500;
+        font-style: normal;
+        letter-spacing: .5px;
+        font-family: 'Lato', sans-serif;
+        line-height: 30px;
+      }
+
+      .nav-item {
+        cursor: pointer;
+        margin-bottom: 2px;
+      }
+
+      .nav-item:hover {
+        color: var(--app-primary-color);
+      }
+
+      @media (max-width: 1450px) {
+        .info {
+          width: 240px;
+        }
+      }
+
+      @media (max-width: 768px) {
+
+         :host {
+          @apply --layout-vertical;
+          width: auto;
+          margin: 0;
+        }
+        #nav {
+          display: none;
+        }
+
+        .info {
+          width: auto;
+        }
+
+        .main {
+          padding: 0;
+        }
+      }
+
+      @media (max-width: 550px) {
+
+
+        .info {
+          padding: 0;
+        }
+      }
+    </style>
+
+    <iron-ajax id="ajax" handle-as="json" last-response="{{menu}}"></iron-ajax>
+
+
+    <div class="info">
+      <slot name="info"></slot>
+      <div id="nav" fixed$="[[navFixed]]">
+        <div>
+          <div class="nav-category">
+            <div class="category-cover"></div>
+            <div class="category-name">Категории:</div>
+          </div>
+        </div>
+
+        <template id="navr" is="dom-repeat" items="[[menu.categories]]" as="category">
+          <div class="nav-item" on-tap="_categoryTapHandler">[[category.name]]</div>
+        </template>
+      </div>
+    </div>
+
+    <div class="main">
+      <template is="dom-repeat" items="[[menu.data]]" as="data">
+        <gr-menu-detail id="[[data.category.code]]" menu="[[data]]" group="[[group]]"></gr-menu-detail>
+      </template>
+    </div>
+
+
+
+
+
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gr-menu-list',
+
+      properties: {
+        categories: {
+          type: Array
+        },
+
+        group: {
+          type: String,
+        },
+
+        active: {
+          type: Boolean,
+          observer: '_activeChange',
+        },
+
+        navFixed: {
+          type: Boolean,
+          value: false,
+        },
+
+        grContentOffset: {
+          type: Number,
+        },
+
+        xScrollTop: {
+          type: Number,
+          readOnly: true,
+          value: 0
+        },
+
+      },
+
+      behaviors: [
+        Polymer.IronScrollTargetBehavior
+      ],
+
+      ready: function () {
+        this._generateRequest(this.group);
+
+      },
+
+      _activeChange: function (active) {
+        if (active) {
+          //высчитывает отступ навигации только когда отрисована вся страница 
+          //т.к. firefox долго отрисовывает header, отступ высчитывается без его учета
+          Polymer.RenderStatus.afterNextRender(this, function () {
+            this.grContentOffset = this._getOffset(this.$$('#nav')) - 72;
+          });
+
+          this.toggleScrollListener(true);
+          this._scrollHandler();
+        } else {
+          this.toggleScrollListener(false);
+        }
+      },
+
+      _scrollHandler: function () {
+        this._setXScrollTop(this._scrollTop);
+        if (this.xScrollTop > this.grContentOffset && !this.navFixed) {
+
+          this.navFixed = true;
+        } else if (this.xScrollTop < this.grContentOffset && this.navFixed) {
+          this.navFixed = false;
+
+        }
+
+      },
+
+      _categoryTapHandler: function (e) {
+        var category = '#' + e.model.category.code,
+          el = this.$$(category),
+          offset = this._getOffset(el);
+
+        scroll(0, offset - 80);
+      },
+
+      _generateRequest: function (group) {
+        if (group === 'breakfast') {
+          this.$.ajax.url = 'http://178.62.212.17/api/v1/breakfast/?format=gr_menu_breakfast';
+        } else {
+          this.$.ajax.url = 'http://178.62.212.17/api/v1/menu/?format=gr_menu&group=' + group;
+        }
+        this.$.ajax.generateRequest();
+      },
+
+
+      _getOffset: function (el) {
+        var bodyRect = document.body.getBoundingClientRect(),
+          elemRect = el.getBoundingClientRect();
+
+        return elemRect.top - bodyRect.top;
+      },
+
+    });
+  </script>
+
+</dom-module>

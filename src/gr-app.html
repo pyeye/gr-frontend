@@ -1,0 +1,451 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+
+<dom-module id="gr-app">
+  <template>
+    <style>
+      :host {
+        --app-primary-color: #94c21a;
+        --app-text-color: #37474F;
+        --app-body-color: #ddd;
+        --app-secondary-color: black;
+        --app-error-color: #F44336;
+
+        display: block;
+      }
+
+       app-drawer {
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                    0 6px 30px 5px rgba(0, 0, 0, 0.12),
+                    0 8px 10px -5px rgba(0, 0, 0, 0.4);
+        
+        --app-drawer-content-container: {
+          background-image: url(http://178.62.212.17/img/static/wood.jpg);
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        }
+      }
+
+      paper-toast iron-icon {
+        margin-right: 8px;
+        margin-bottom: 2px;
+      }
+
+      #rtoast {
+        --paper-toast-background-color: var(--app-accent-color);
+        font-size: 13px !important;
+      }
+
+      #form_send {
+        --paper-toast-background-color: var(--app-primary-color);
+        text-transform: uppercase;
+        color: #ddd;
+        font-family: 'Lato', sans-serif;
+        font-weight: 500;
+        letter-spacing: .8px;
+      }
+
+      #form_error {
+        --paper-toast-background-color: #DD2C00;
+        text-transform: uppercase;
+        color: #ddd;
+        font-family: 'Lato', sans-serif;
+        font-weight: 500;
+        letter-spacing: .6px;
+      }
+
+     
+
+      
+
+      
+
+      
+      .drawer-container {
+        height: 100%;
+        overflow: auto;
+        
+      }
+
+      .drawer-flex {
+        @apply --layout-vertical;
+        height: 100%;
+        
+      }
+
+      .drawer-logo {
+        position: relative;
+        padding-top: 32px;
+        padding-bottom: 22px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+
+      .drawer-logo img {
+        width: 200px;
+      }
+
+      .drawer-nav {
+        margin: 22px 0;
+        @apply --layout-flex;
+        @apply --layout-vertical;
+        min-height: 200px;
+      }
+
+      .reservation-item {
+        position: relative;
+        color: var(--app-primary-color);
+        text-decoration: none;
+        border: 2px solid var(--app-primary-color);
+        margin: 20px;
+      }
+
+      .reservation-item a {
+        @apply --paper-font-headline;
+        font-size: 18px;
+        
+        letter-spacing: 2.5px;
+        text-align: center;
+        display: block;
+        color: var(--app-body-color);
+        text-decoration: none;
+        
+        line-height: 40px;
+        text-transform: uppercase;
+        font-family: 'Lato', sans-serif;
+        font-weight: 500;
+        
+      }
+
+      .reservation-item:hover a {
+        color: var(--app-primary-color);
+      }
+
+
+      .nav-item {
+        position: relative;
+        display: block;
+        color: var(--app-primary-color);
+        text-decoration: none;
+      }
+
+      .nav-item a {
+        @apply --paper-font-headline;
+        font-size: 18px;
+        
+        letter-spacing: 2px;
+        text-align: center;
+        display: block;
+        color: var(--app-body-color);
+        text-decoration: none;
+        
+        line-height: 40px;
+        text-transform: uppercase;
+        font-family: 'Lato', sans-serif;
+        font-weight: 500;
+        
+      }
+
+      .nav-item:hover a {
+        color: var(--app-primary-color);
+      }
+
+      .nav-item.iron-selected a {
+        color: var(--app-primary-color);
+
+      }
+
+      .drawer-contacts {
+        border-top: 1px solid rgba(255, 255, 255, 0.5);
+        margin-left: 20px;
+        margin-right: 20px;
+        padding-top: 16px;
+        @apply --layout-vertical;
+        
+        @apply --paper-font-subhead;
+        font-weight: 500;
+        font-size: 16px;
+       color: var(--app-body-color);
+        margin-bottom: 20px;
+        letter-spacing: 0.6px;
+        min-height: 108px
+      }
+
+      .contacts-adress {
+        margin-bottom: 12px;
+      }
+
+      
+
+      .drawer-social {
+        @apply --layout-horizontal;
+        @apply --layout-center-justified;
+        margin-bottom: 28px;
+        color: var(--app-body-color);
+      }
+
+      .social-icon {
+        color: var(--app-body-color);
+        transition: color 0.5s;
+        --iron-icon-height: 27px;
+        --iron-icon-width: 27px;
+        
+        margin-left: 16px;
+        margin-right: 16px;
+        
+      }
+
+      .social-icon:hover {
+        color: var(--app-primary-color);
+        
+      }
+
+      .reload-button {
+        color: var(--app-primary-color);
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      @media (max-width: 550px) {
+        .drawer-logo img {
+          width: 180px;
+        }
+
+      }
+
+      
+    </style>
+   
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <app-drawer-layout fullbleed responsive-width="1050px">
+      <!-- Drawer content -->
+      <app-drawer id="drawer" no-focus-trap swipe-open>
+        <div class="drawer-container" style="height: 100%; overflow: auto;">
+          <div class="drawer-flex">
+              <div class="drawer-logo">
+                <a href="/">
+                  <img src="http://178.62.212.17/img/static/Logo.png" alt="" />
+                </a>
+                  
+                </div>
+          <iron-selector selected="[[pageSection]]" attr-for-selected="name" class="drawer-nav" role="navigation">
+            <div class="nav-item" name="news">
+                <a  href="/news">Новости</a><paper-ripple></paper-ripple>
+            </div>
+            <div class="nav-item" name="menu">
+                <a  href="/menu">Меню</a><paper-ripple></paper-ripple>
+            </div>
+            <div class="nav-item" name="events">
+                <a  href="/events">События</a><paper-ripple></paper-ripple>
+            </div>
+            <div class="nav-item" name="gallery">
+                <a  href="/gallery">Галерея</a><paper-ripple></paper-ripple>
+            </div>
+            <div class="nav-item" name="about">
+                <a  href="/about">о Нас</a><paper-ripple></paper-ripple>
+            </div>
+            
+          </iron-selector>
+
+          <div class="reservation-item" name="reservation">
+              <a  href="/reservation">Бронирование</a><paper-ripple></paper-ripple>
+          </div>
+
+          <div class="drawer-contacts">
+              <div class="contacts-time">GREENERY GASTROBAR</div>
+              <div class="contacts-adress">office@greenerybar.ru</div>
+            <div class="contacts-time">Челябинск &nbsp&nbsp&nbsp&nbsp | &nbsp777-20-76</div>
+            <div class="contacts-time">Цвиллинга,6 &nbsp | &nbsp24/7</div>
+          </div>
+          
+          <div class="drawer-social">
+                  <a target="_blank" href="https://vk.com/boris_bar">
+                    <iron-icon class="social-icon" icon="gr-icons:vk"></iron-icon>
+                  </a>
+                  <a target="_blank" href="https://www.instagram.com/boris__bar/">
+                    <iron-icon class="social-icon" icon="gr-icons:instagram"></iron-icon>
+                  </a>
+              </div>
+          </div>
+          
+        </div>
+        
+      </app-drawer>
+
+      <!-- Main content -->
+        <neon-animated-pages
+            selected="[[page]]"
+            attr-for-selected="name"
+            selected-attribute="active"
+            fallback-selection="view404"
+            entry-animation="fade-in-animation"
+            exit-animation="fade-out-animation"
+            role="main">
+          <gr-news name="news">
+            <paper-icon-button icon="gr-icons:menu" drawer-toggle></paper-icon-button>
+          </gr-news>
+          <gr-article route=[[subroute]]  name="article"></gr-article>
+          <gr-events name="events">
+            <paper-icon-button icon="gr-icons:menu" drawer-toggle></paper-icon-button>
+          </gr-events>
+          <gr-event route=[[subroute]]  name="event"></gr-event>
+          <gr-menu name="menu">
+            <paper-icon-button icon="gr-icons:menu" drawer-toggle></paper-icon-button>
+          </gr-menu>
+          <gr-gallery name="gallery">
+            <paper-icon-button icon="gr-icons:menu" drawer-toggle></paper-icon-button>
+          </gr-gallery>
+          <gr-album route=[[subroute]] name="album"></gr-album>
+          <gr-reservation name="reservation">
+            <paper-icon-button icon="gr-icons:menu" drawer-toggle></paper-icon-button>
+          </gr-reservation>
+          <gr-about name="about">
+              <paper-icon-button icon="gr-icons:menu" drawer-toggle></paper-icon-button>
+            </gr-about>
+          <gr-view404 name="view404">
+            <paper-icon-button icon="gr-icons:menu" drawer-toggle></paper-icon-button>
+          </gr-view404>
+        </neon-animated-pages>
+      
+    </app-drawer-layout>
+
+    <paper-toast id="rtoast" horizontal-align="right" always-on-top duration="0">
+      Доступна новая версия. <paper-button class="reload-button" on-tap="_reloadApp">Обновить</paper-button>
+    </paper-toast>
+
+    <paper-toast id="form_send" horizontal-align="right" always-on-top duration="5000">
+        Заявка отправлена.
+      </paper-toast>
+
+      <paper-toast id="form_error" horizontal-align="right" always-on-top duration="5000">
+          Заполните все поля формы
+        </paper-toast>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gr-app',
+
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged',
+        },
+      },
+
+      listeners: {
+        'gr-section-change': '_sectionChangeHandler',
+        'gr-form-send': '_formSendHandler',
+        'gr-form-error': '_formErrorHandler',
+        
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)',
+      ],
+
+      ready: function() {
+        
+        Polymer.RenderStatus.afterNextRender(this, function(){
+          this.importHref(this.resolveUrl('lazy-resources.html'), function() {
+          if ('serviceWorker' in navigator && window.location.hostname != 'localhost') {
+            console.log('registering...');
+          navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+            console.log('registered');
+                  registration.onupdatefound = function() {
+                    var installingWorker = registration.installing;
+                    installingWorker.onstatechange = function() {
+                      switch (installingWorker.state) {
+                        case 'installed':
+                          if (navigator.serviceWorker.controller) {
+                            console.log('New version available');
+                            
+                          }
+                          break;
+                        case 'redundant':
+                          console.error('The installing service worker became redundant.');
+                          break;
+                        default:
+                          break;
+                      }
+                    };
+                  };
+                });
+        }
+        }.bind(this), null, true);
+        });
+      },
+
+
+      _routePageChanged: function(page) {
+        this.page = page || 'news';
+
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
+      },
+
+      _pageChanged: function(page) {
+        window.scroll(0,0);
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl('gr-' + page + '.html');
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      _showPage404: function() {
+        this.page = 'view404';
+      },
+
+      _sectionChangeHandler: function(e) {
+        this.pageSection = e.detail.section;
+      },
+
+      _reloadApp: function() {
+        window.location.reload();
+      },
+
+      _formSendHandler: function(e) {
+        this.$.form_send.open();
+      },
+      _formErrorHandler: function(e) {
+        this.$.form_error.open();
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,363 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="gr-album">
+  <template>
+    <style include="shared-styles">
+       :host {
+        display: block;
+        --app-header-front-image: url(http://178.62.212.17/img/static/headers/menu.jpg);
+        --app-header-color: '';
+        --app-header-image: '';
+      }
+
+      app-header {
+
+        color: var(--app-body-color);
+        --app-header-background-front-layer: {
+          background-image: var(--app-header-front-image);
+          background-position: left center;
+        }
+      }
+
+      bottom-nav {
+        color: var(--app-body-color);
+        background-color: var(--app-primary-color);
+      }
+
+
+
+      app-toolbar.tall {
+        height: 250px;
+        padding-left: 20px;
+      }
+
+      sample-content {
+        padding-top: 212px;
+      }
+
+      [main-title] {
+        font-weight: normal;
+        -webkit-transform-origin: center top !important;
+        transform-origin: center top !important;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        font-size: 38px;
+      }
+
+      [main-title] iron-icon {
+        --iron-icon-fill-color: var(--app-body-color);
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      [main-title] .title-label {
+        margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Lato', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
+        white-space: pre-line;
+        text-align: center;
+      }
+
+
+      [condensed-title] {
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        font-size: 20px;
+        margin-left: -36px;
+      }
+
+      [condensed-title] .title-label {
+        @apply --paper-font-title;
+        font-size: 22px;
+        margin-left: 24px;
+        margin-right: 24px;
+        white-space: pre-line;
+        text-align: center;
+        letter-spacing: 2px;
+        font-family: 'Lato', sans-serif !important;
+        text-align: center;
+      }
+
+      [condensed-title] iron-icon {
+        --iron-icon-fill-color: var(--app-body-color);
+        --iron-icon-height: 14px;
+        --iron-icon-width: 14px;
+      }
+
+      [condensed-title] i {
+        font-weight: 100;
+        font-style: normal;
+      }
+
+
+
+      app-toolbar {
+        color: var(--app-body-color);
+      }
+
+      #header {
+        background-position: left center;
+      }
+
+
+
+      .centered-container {
+        max-width: 95%;
+        margin: 40px auto;
+      }
+
+      .box {
+        object-fit: cover;
+        position: relative;
+        width: 24%;
+        display: inline-block;
+
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        margin: 4px;
+        text-decoration: none;
+      }
+
+      .box:before {
+        content: "";
+        display: block;
+        padding-top: 100%;
+        /* initial ratio of 1:1*/
+      }
+
+      .item {
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+      }
+
+      .card-container {
+        object-fit: cover;
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+
+
+
+      @media (max-width: 1450px) {
+        app-toolbar.tall {
+          height: 200px;
+        }
+      }
+
+
+      @media (max-width: 1050px) {
+        [main-title] {
+          -webkit-transform-origin: center top !important;
+          transform-origin: center top !important;
+          font-size: 30px;
+        }
+        [main-title] .title-label {
+          font-size: 30px;
+          margin-left: 16px;
+          margin-right: 16px;
+        }
+        [condensed-title] {
+          margin-left: -36px;
+          font-size: 20px;
+        }
+        [condensed-title] .title-label {
+          font-size: 20px;
+          margin-left: 16px;
+          margin-right: 16px;
+        }
+
+        .centered-container {
+          max-width: 100%;
+        }
+
+        .box {
+
+          margin: 2px;
+        }
+      }
+
+      @media (max-width: 550px) {
+        .box {
+
+          width: 32%;
+        }
+      }
+
+      @media (max-width: 330px) {
+        .box {
+
+          width: 47%;
+        }
+      }
+    </style>
+
+    <app-route route="[[route]]" pattern="/:album" data="{{albumData}}"></app-route>
+    <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
+    <iron-ajax id="ajax" handle-as="json" on-response="handleResponse"></iron-ajax>
+
+    <app-header-layout id="layout">
+
+
+      <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
+        <app-toolbar>
+          <a href="/gallery" tabindex="-1">
+            <paper-icon-button icon="gr-icons:arrow-back"></paper-icon-button>
+          </a>
+          <div condensed-title>
+            <div class="title-label">[[headerTitle]]</div>
+          </div>
+        </app-toolbar>
+        <app-toolbar class="tall">
+          <div main-title>
+            <div class="title-label">[[headerTitle]]</div>
+          </div>
+        </app-toolbar>
+      </app-header>
+
+      <div class="centered-container"></div>
+
+
+    </app-header-layout>
+
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'gr-album',
+
+      properties: {
+        active: {
+          type: Boolean,
+          observer: '_activeChange'
+        },
+
+        init: {
+          type: Boolean,
+          value: false,
+        },
+
+        album: {
+          type: Object,
+          notify: true,
+          observer: '_albumChanged'
+        },
+
+        headerTitle: {
+          type: String,
+        },
+      },
+
+      observers: [
+        '_albumPageChanged(albumData.album)'
+      ],
+
+
+      ready: function () {
+        this.fire('gr-section-change', {
+          'section': 'gallery'
+        });
+
+        if (this.middleScreen) {
+
+          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
+        } else {
+          this.$.header.style['backgroundColor'] = '#8BC34A';
+
+
+        }
+      },
+
+      _activeChange: function (active) {
+        var gallery;
+        if (active) {
+          this.fire('gr-section-change', {
+            'section': 'gallery'
+          });
+          this.initial = false;
+          Polymer.dom(this.$.layout).removeChild(Polymer.dom(this.$.layout).lastChild);
+          gallery = document.createElement('div')
+          gallery.className = 'centered-container';
+          Polymer.dom(this.$.layout).appendChild(gallery);
+        }
+      },
+
+      _albumPageChanged: function (album, oldAlbum) {
+        if (album !== undefined && this.route.prefix === '/album' && !this.initial) {
+          this.$.ajax.url = ['http://178.62.212.17/api/v1/albums', album].join('/') + '/';
+          this.$.ajax.generateRequest();
+          this.initial = true;
+        }
+      },
+
+      _albumChanged: function (album) {
+        lightGallery(Polymer.dom(this.$.layout).lastChild, {
+          'thumbnail': true,
+          'hash': true,
+        });
+
+
+      },
+
+      handleResponse: function (request) {
+        var items, itemsArray, gallery;
+        var fragment = document.createDocumentFragment();
+
+        this.headerTitle = request.detail.response.event.name;
+        this.customStyle['--app-header-front-image'] = 'url(http://178.62.212.17' + request.detail.response.main_image
+          .original + ')';
+        this.updateStyles();
+        this.$.layout.resetLayout();
+
+        var img = [];
+        for (var i = 0; i < request.detail.response.images.length; i++) {
+          img[i] = document.createElement('a');
+          img[i]['href'] = request.detail.response.images[i]['image']['original'];
+          img[i]['innerHTML'] = '<div class="box"> <div class="item">  <img class="card-container" src=' +
+            request.detail.response.images[i]['image']['thumbnail'] + ' /></div> </div>';
+          fragment.appendChild(img[i]);
+
+        }
+
+        Polymer.dom(Polymer.dom(this.$.layout).lastChild).appendChild(fragment);
+
+        this.album = request.detail.response;
+        scroll(0, 0);
+
+      },
+
+    });
+  </script>
+</dom-module>
