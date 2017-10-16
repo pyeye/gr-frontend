@@ -292,7 +292,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </div>
                         <div class="item-row">
                             <div class="item-description">[[item.description]]</div>
-                            <div class="price-measure-box">
+                            <div class="price-measure-box" hidden$="[[_hidePrice()]]">
                                 <template is="dom-repeat" items="[[item.prices]]" as="price">
                                     <div class="price-measure">[[price.count]] [[price.measure]]</div>
                                 </template>
