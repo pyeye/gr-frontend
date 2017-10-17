@@ -13,6 +13,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="../bower_components/google-map/google-map-marker.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="gr-about-concept">
@@ -34,6 +36,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 ;
                 --iron-icon-height: 24px;
                 --iron-icon-width: 24px;
+            }
+
+            google-map {
+                width: auto;
+                height: 500px;
             }
 
 
@@ -71,6 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 100%;
                 height: 500px;
                 padding-right: 5px;
+                
             }
 
             
@@ -84,17 +92,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: calc(100% - 5px);
                 height: 100%;
                 background-color: var(--app-primary-color);
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
             }
 
-            iron-image {
-                height: 500px;
-                width: 100%;
-            }
+            
 
             @media (max-width: 1050px) {
                 .centered-container {
                    
                 @apply --layout-vertical;
+                margin: 24px 0 0 0;
+                    max-width: 100%;  
             
                 
             }
@@ -107,10 +115,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .image {
                 
-                padding: 8px; 
-                width: calc(100% - 16px);
+                padding: 0; 
+                width: 100% ;
+            }
+
+            .portrait {
+                
+                height: 450px;
+                
+                
+            }
+
+            google-map {
+                
+                height: 450px;
+            }
+
+            .portrait-border{
+                display: none;
             }
             }
+
+
+          
 
 
 
@@ -151,8 +178,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </p> 
             </div>
             <div class="image">
+                    
                     <div class="portrait">
-                            <iron-image sizing="cover" fade src="http://178.62.212.17/img/static/about/concept.jpg"></iron-image>
+                        <google-map zoom="17" latitude="55.165932" longitude="61.403247" api-key="AIzaSyA6PhEAjrFPzXRt9nQFH691O2SGP19AUcY">
+                            <google-map-marker latitude="55.165932" longitude="61.403247" title="GREENERY GASTRO BAR"></google-map-marker>
+                        </google-map>
+                           
                             
                             <div class="portrait-border"></div>
                            
