@@ -7,6 +7,8 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+<link href="../assets/gr-date-time-picker.min.css" rel="stylesheet">
+<script type="text/javascript" src="../assets/gr-date-time-picker.min.js"></script>
 
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
@@ -177,120 +179,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}" label="Номер телефона"
                 required></paper-input>
 
-            <div class="layout-horizontal" id="ptime">
-                <div class="half">
-                    <paper-dropdown-menu label="Время c" id="ptimestart" value="{{form.time_start}}">
-                        <paper-listbox id="time_start" class="dropdown-content">
-                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 03:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 04:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 04:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 05:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 05:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 06:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 06:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 07:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 07:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 08:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 08:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 09:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 09:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 10:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 10:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 11:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 11:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 12:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 12:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 13:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 13:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 14:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 14:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 15:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 15:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                        </paper-listbox>
-                    </paper-dropdown-menu>
-                </div>
-                <div class="half">
-                    <paper-dropdown-menu label="Время до" id="ptimeend" value="{{form.time_end}}">
-                        <paper-listbox id="time_end" class="dropdown-content">
-                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 03:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 04:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 04:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 05:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 05:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 06:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 06:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 07:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 07:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 08:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 08:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 09:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 09:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 10:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 10:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 11:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 11:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 12:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 12:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 13:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 13:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 14:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 14:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 15:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 15:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                            <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                        </paper-listbox>
-                    </paper-dropdown-menu>
-                </div>
-
-
-            </div>
             <paper-dropdown-menu id="pmenu" label="Количество гостей" value="{{form.count_people}}">
                 <paper-listbox id="peoples" class="dropdown-content">
                     <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
@@ -307,6 +195,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 12 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 </paper-listbox>
             </paper-dropdown-menu>
+
+            <div class="layout-horizontal" id="ptime">
+                <div class="half">
+                    <paper-input id="ptimestart" label="Время c" value="{{form.time_start}}" on-tap="_showTimeStart"></paper-input>
+
+
+                </div>
+                <div class="half">
+                    <paper-input id="ptimeend" label="Время до" value="{{form.time_end}}" on-tap="_showTimeEnd"></paper-input>
+                </div>
+
+
+            </div>
+
 
             <div class="form-comment">
                 <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="200" char-counter></paper-textarea>
@@ -366,6 +268,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Boolean,
                     value: false,
                 },
+            },
+
+            listeners: {
+                'gr-time-start-selected': '_timeStartSelectedHandler',
+                'gr-time-start-cleared': '_timeStartClearedHandler',
+                'gr-time-end-selected': '_timeEndSelectedHandler',
+                'gr-time-end-cleared': '_timeEndClearedHandler'
             },
 
             observers: [
@@ -434,9 +343,79 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     count_people: '',
                 };
                 this.$.peoples.selected = null;
-                this.$.time_start.selected = null;
-                this.$.time_end.selected = null;
 
+            },
+
+            _showTimeStart: function (e) {
+                var self = this;
+                var options = {
+                    minuteStep: 15
+                };
+                var config = {
+                    day: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    shortDay: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    MDW: 'D, d-M',
+                    YM: 'yyyy-M',
+                    OK: 'OK',
+                    CANCEL: 'ОТМЕНА',
+                    CLEAR: ''
+                };
+
+                var timePicker = new DateTimePicker.Time(options, config);
+
+                timePicker.on('selected', function (formatTime, now) {
+                    self.fire('gr-time-start-selected', {
+                        'time': formatTime
+                    });
+                })
+
+                timePicker.on('cleared', function () {
+                    self.fire('gr-time-start-cleared');
+                })
+            },
+
+            _timeStartSelectedHandler: function (e) {
+                this.$.ptimestart.value = e.detail.time;
+            },
+
+            _timeStartClearedHandler: function (e) {
+                this.$.ptimestart.value = '';
+            },
+
+            _showTimeEnd: function (e) {
+                var self = this;
+                var options = {
+                    minuteStep: 15
+                };
+                var config = {
+                    day: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    shortDay: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    MDW: 'D, d-M',
+                    YM: 'yyyy-M',
+                    OK: 'OK',
+                    CANCEL: 'ОТМЕНА',
+                    CLEAR: ''
+                };
+
+                var timePicker = new DateTimePicker.Time(options, config);
+
+                timePicker.on('selected', function (formatTime, now) {
+                    self.fire('gr-time-end-selected', {
+                        'time': formatTime
+                    });
+                })
+
+                timePicker.on('cleared', function () {
+                    self.fire('gr-time-end-cleared');
+                })
+            },
+
+            _timeEndSelectedHandler: function (e) {
+                this.$.ptimeend.value = e.detail.time;
+            },
+
+            _timeEndClearedHandler: function (e) {
+                this.$.ptimeend.value = '';
             },
 
 
