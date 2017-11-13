@@ -320,7 +320,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
 
                 app-header {
-                    background-image: url(http://178.62.212.17/img/static/wood_horizontal.jpg);
+                    background-image: url(https://greenerybar.ru/img/static/wood_horizontal.jpg);
                 }
                 paper-icon-button {
                     color: var(--app-body-color);
@@ -590,7 +590,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _eventPageChanged: function (event) {
                 if (event !== undefined && this.route.prefix === '/event') {
-                    this.$.ajax.url = ['http://178.62.212.17/api/v1/events', event].join('/') + '/';
+                    this.$.ajax.url = ['https://greenerybar.ru/api/v1/events', event].join('/') + '/';
                     this.$.ajax.generateRequest();
                 }
             },

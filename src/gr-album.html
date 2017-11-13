@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
        :host {
         display: block;
-        --app-header-front-image: url(http://178.62.212.17/img/static/headers/menu.jpg);
+        --app-header-front-image: '';
         --app-header-color: '';
         --app-header-image: '';
       }
@@ -225,6 +225,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-route route="[[route]]" pattern="/:album" data="{{albumData}}"></app-route>
     <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
     <iron-ajax id="ajax" handle-as="json" on-response="handleResponse"></iron-ajax>
 
     <app-header-layout id="layout">
@@ -292,7 +293,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         if (this.middleScreen) {
 
-          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
+          this.$.header.style['backgroundImage'] = 'url(https://greenerybar.ru/img/static/wood_horizontal.jpg)';
         } else {
           this.$.header.style['backgroundColor'] = '#8BC34A';
 
@@ -316,7 +317,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _albumPageChanged: function (album, oldAlbum) {
         if (album !== undefined && this.route.prefix === '/album' && !this.initial) {
-          this.$.ajax.url = ['http://178.62.212.17/api/v1/albums', album].join('/') + '/';
+          this.$.ajax.url = ['https://greenerybar.ru/api/v1/albums', album].join('/') + '/';
           this.$.ajax.generateRequest();
           this.initial = true;
         }
@@ -334,10 +335,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleResponse: function (request) {
         var items, itemsArray, gallery;
         var fragment = document.createDocumentFragment();
+        var headerImageUrl = this.smallScreen ? request.detail.response.main_image.original : request.detail.response.main_image.thumbnail;
 
-        this.headerTitle = request.detail.response.event.name;
-        this.customStyle['--app-header-front-image'] = 'url(http://178.62.212.17' + request.detail.response.main_image
-          .original + ')';
+        this.headerTitle = request.detail.response.name;
+        this.customStyle['--app-header-front-image'] = 'url(https://greenerybar.ru' + headerImageUrl + ')';
         this.updateStyles();
         this.$.layout.resetLayout();
 

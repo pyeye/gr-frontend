@@ -29,6 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
        :host {
         display: block;
+        --app-header-front-image: url(https://greenerybar.ru/img/static/wood_horizontal.jpg);
       }
 
       
@@ -47,10 +48,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-header {
-        
         color: var(--app-body-color);
         --app-header-background-front-layer: {
-          background-image: url(http://178.62.212.17/img/static/headers/gallery.jpg);
+          background-image: var(--app-header-front-image);
           background-position: center center;
         }
         ;
@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         bottom-nav {
         color: var(--app-body-color);
         
-        background-image: url(http://178.62.212.17/img/static/wood_horizontal.jpg);
+        background-image: url(https://greenerybar.ru/img/static/wood_horizontal.jpg);
         background-position: left top;
       }
 
@@ -267,21 +267,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       ready: function() {
-
-       
+        Polymer.RenderStatus.afterNextRender(this, function () {
+          var img_size = this.smallScreen ? '_s' : '';
+          this.customStyle['--app-header-front-image'] = 'url(https://greenerybar.ru/img/static/headers/gallery' + img_size + '.jpg)';
+          this.updateStyles();
+        });
+      
+        this.$.header.style['backgroundImage'] = this.middleScreen ? 'url(https://greenerybar.ru/img/static/wood_horizontal.jpg)' : '#8BC34A';
+        
         this.fire('gr-section-change', {
-            'section': 'gallery'
-          });
-    
-
-        if (this.middleScreen) {
-          
-          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
-        } else {
-          this.$.header.style['backgroundColor'] = '#8BC34A';
-          
-         
-        }
+           'section': 'gallery'
+       });
       },
 
       _goToTop: function(e) {

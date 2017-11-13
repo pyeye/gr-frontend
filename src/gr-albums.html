@@ -213,7 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
-    <iron-ajax auto handle-as="json" url="http://178.62.212.17/api/v1/albums/" on-response="handleResponse"></iron-ajax>
+    <iron-ajax auto handle-as="json" url="https://greenerybar.ru/api/v1/albums/" on-response="handleResponse"></iron-ajax>
 
     <div class="centered-container">
       <div class="app-grid">
@@ -226,10 +226,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <div class="item-horizontal">
                 <div class="title-event">
                   <div class="event-date">
-                    [[album.event.date.day]] [[album.event.date.month]]
+                    [[album.date.day]] [[album.date.month]]
                   </div>
                   <div class="event-name">
-                    [[album.event.name]]
+                    [[album.name]]
                   </div>
                 </div>
                 <div class="title-count">
@@ -268,7 +268,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleResponse: function (request) {
         var response = request.detail.response;
         var index, len, date, poster;
-        var domain = 'http://178.62.212.17'
+        var domain = 'https://greenerybar.ru'
         var options = {
           month: 'long',
           day: 'numeric',
@@ -276,12 +276,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         for (index = 0, len = response.length; index < len; ++index) {
           poster = this.smallScreen ? response[index].main_image.thumbnail : response[index].main_image.original;
           response[index].poster = domain + poster;
-          date = new Date(response[index].event.date);
+          date = new Date(response[index].date);
           date = date.toLocaleString("ru", options).split(' ');
-          response[index].event.date = {
+          response[index].date = {
             'day': date[0],
             'month': date[1],
-            'original': response[index].event.date,
+            'original': response[index].date,
           };
 
         };

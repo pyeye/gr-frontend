@@ -40,6 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
        :host {
         display: block;
+        --app-header-front-image: url(https://greenerybar.ru/img/static/wood_horizontal.jpg);
         --paper-spinner-color: var(--app-body-color);
         --iron-icon-fill-color: var(--app-text-color);
         --paper-toast-background-color: var(--app-accent-color);
@@ -109,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         z-index: 0 !important;
         color: #FFFFFF;
         --app-header-background-front-layer: {
-          background-image: url(http://178.62.212.17/img/static/headers/reservation.jpg);
+          background-image: var(--app-header-front-image);
           background-position: center center;
         }
         ;
@@ -508,7 +509,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         app-header {
 
           --app-header-background-front-layer: {
-            background-image: url(http://178.62.212.17/img/static/headers/reservation.jpg);
+            background-image: url(https://greenerybar.ru/img/static/headers/reservation.jpg);
             background-position: center center;
           }
         }
@@ -538,9 +539,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-ajax id="ajax" url="http://178.62.212.17/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
+    <iron-ajax id="ajax" url="https://greenerybar.ru/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
       loading={{loading}} on-response="handleResponse"></iron-ajax>
     <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
     <app-header-layout>
 
       <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
@@ -892,12 +894,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       ready: function () {
-        if (this.middleScreen) {
-
-          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
-        } else {
-          this.$.header.style['backgroundColor'] = '#8BC34A';
-        }
+        Polymer.RenderStatus.afterNextRender(this, function () {
+          var img_size = this.smallScreen ? '_s' : '';
+          this.customStyle['--app-header-front-image'] = 'url(https://greenerybar.ru/img/static/headers/reservation' + img_size + '.jpg)';
+          this.updateStyles();
+        });
+              
+        this.$.header.style['backgroundImage'] = this.middleScreen ? 'url(https://greenerybar.ru/img/static/wood_horizontal.jpg)' : '#8BC34A';
       },
 
 

@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
        :host {
         display: block;
+        --app-header-front-image: url(https://greenerybar.ru/img/static/wood_horizontal.jpg);
       }
 
       .content {
@@ -163,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         color: #FFFFFF;
         --app-header-background-front-layer: {
-          background-image: url(http://178.62.212.17/img/static/headers/home.jpg);
+          background-image: var(--app-header-front-image);
           background-position: center center;
         }
         ;
@@ -367,8 +368,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-ajax auto handle-as="json" url="http://178.62.212.17/api/v1/news/" on-response="handleResponse"></iron-ajax>
+    <iron-ajax auto handle-as="json" url="https://greenerybar.ru/api/v1/news/" on-response="handleResponse"></iron-ajax>
     <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
     <app-header-layout>
 
       <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
@@ -433,19 +435,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       ready: function () {
-
+        Polymer.RenderStatus.afterNextRender(this, function () {
+          var img_size = this.smallScreen ? '_s' : '';
+          this.customStyle['--app-header-front-image'] = 'url(https://greenerybar.ru/img/static/headers/home' + img_size + '.jpg)';
+          this.updateStyles();
+        });
+              
+        this.$.header.style['backgroundImage'] = this.middleScreen ? 'url(https://greenerybar.ru/img/static/wood_horizontal.jpg)' : '#8BC34A';
+                
         this.fire('gr-section-change', {
           'section': 'news'
         });
-
-        if (this.middleScreen) {
-
-          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
-        } else {
-          this.$.header.style['backgroundColor'] = '#8BC34A';
-
-
-        }
       },
 
       _activeChange: function (active) {

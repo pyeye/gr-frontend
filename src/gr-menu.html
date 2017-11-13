@@ -32,6 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        :host {
         display: block;
         height: 100vh;
+        --app-header-front-image: url(https://greenerybar.ru/img/static/wood_horizontal.jpg);
       }
 
       paper-tabs {
@@ -52,7 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         color: #FFFFFF;
         --app-header-background-front-layer: {
-          background-image: url(http://178.62.212.17/img/static/headers/menu.jpg);
+          background-image: var(--app-header-front-image);
           background-position: left bottom;
         }
         ;
@@ -61,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bottom-nav {
         color: var(--app-body-color);
 
-        background-image: url(http://178.62.212.17/img/static/wood_horizontal.jpg);
+        background-image: url(https://greenerybar.ru/img/static/wood_horizontal.jpg);
         background-position: left top;
       }
 
@@ -283,19 +284,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       ready: function () {
+        Polymer.RenderStatus.afterNextRender(this, function () {
+          var img_size = this.smallScreen ? '_s' : '';
+          this.customStyle['--app-header-front-image'] = 'url(https://greenerybar.ru/img/static/headers/menu' + img_size + '.jpg)';
+          this.updateStyles();
+        });
+              
+        this.$.header.style['backgroundImage'] = this.middleScreen ? 'url(https://greenerybar.ru/img/static/wood_horizontal.jpg)' : '#8BC34A';
+                
 
         this.fire('gr-section-change', {
           'section': 'menu'
         });
-
-        if (this.middleScreen) {
-
-          this.$.header.style['backgroundImage'] = 'url(http://178.62.212.17/img/static/wood_horizontal.jpg)';
-        } else {
-          this.$.header.style['backgroundColor'] = '#8BC34A';
-
-
-        }
       },
 
       _activeChange: function (active) {

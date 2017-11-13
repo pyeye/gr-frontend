@@ -5,7 +5,7 @@ var webComponentsSupported = ('registerElement' in document
     && 'import' in document.createElement('link')
     && 'content' in document.createElement('template'));
 
-logoEl.style.backgroundImage = screen.width < 550 ? 'url(http://178.62.212.17/img/static/preload_s.jpg)' : 'url(http://178.62.212.17/img/static/preload.jpg)';
+logoEl.style.backgroundImage = screen.width < 550 ? 'url(https://greenerybar.ru/img/static/preload_s.jpg)' : 'url(https://greenerybar.ru/img/static/preload.jpg)';
 
 document.getElementById("preloading-confirm").addEventListener("click", function(e) {
 	buttonPressed = true;
