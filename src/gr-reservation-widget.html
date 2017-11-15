@@ -31,8 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <style>
              :host {
-                width: 100%;
-                padding: 8px;
+                 
                 color: var(--app-text-color);
                 --paper-spinner-color: var(--app-body-color);
                 --iron-icon-fill-color: var(--app-text-color);
@@ -45,12 +44,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 --paper-checkbox-unchecked-ink-color: var(--app-text-color);
                 --paper-checkbox-checked-color: var(--app-primary-color);
                 --paper-checkbox-checked-ink-color: var(--app-primary-color);
+                
+            }
+
+            .form-box {
+                margin-top: 6px;
+                position: relative;
+                width: 100%;
+            }
+
+            .form-box:before {
+                content: "";
+                display: block;
+                padding-top: 141.42857%;
+                /* initial ratio of 1:1*/
             }
 
             .form {
-                margin-top: -20px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;              
+                @apply --layout-vertical;
+            }
+
+            .form-box-event {
+                margin-top: 6px;
                 position: relative;
-                height: 100%;
+                width: 100%;
+                height: 500px;
+            }
+
+            .form-event {
+                position: relative;   
+                height: 100%;         
                 @apply --layout-vertical;
             }
 
@@ -150,6 +178,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 20px;
             }
 
+            @media (max-width: 550px) {
+
+                .button-border {
+
+              
+                top: 4px;
+             
+                height: 100%;
+               
+            }
+
+        .button {
+            margin-top: 0;
+        }
+      }
+
 
             [hidden] {
                 display: none;
@@ -172,61 +216,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-ajax id="ajax" url="https://greenerybar.ru/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
             loading={{loading}} on-response="handleResponse"></iron-ajax>
 
-        <div class="form">
-            <paper-input id="i1" autofocus maxlength="20" char-counter error-message="Это обязательное поле!" value="{{form.name}}" label="Имя и Фамилия"
-                required></paper-input>
-
-            <paper-input maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}" label="Номер телефона"
-                required></paper-input>
-
-            <paper-dropdown-menu id="pmenu" label="Количество гостей" value="{{form.count_people}}">
-                <paper-listbox id="peoples" class="dropdown-content">
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 9 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 10 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 11 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                    <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 12 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                </paper-listbox>
-            </paper-dropdown-menu>
-
-            <div class="layout-horizontal" id="ptime">
-                <div class="half">
-                    <paper-input id="ptimestart" label="Время c" value="{{form.time_start}}" on-tap="_showTimeStart"></paper-input>
-
-
-                </div>
-                <div class="half">
-                    <paper-input id="ptimeend" label="Время до" value="{{form.time_end}}" on-tap="_showTimeEnd"></paper-input>
-                </div>
-
-
-            </div>
-
-
-            <div class="form-comment">
-                <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="200" char-counter></paper-textarea>
-            </div>
-
-            <div class="form-actions">
-                <div>
-                    <div class="button" on-tap="submitForm" processing$="[[loading]]">
-                        <div class="loading-box" visible$="[[loading]]">
-                            <paper-spinner-lite active$="[[loading]]"></paper-spinner-lite>
-
-                        </div>
-                        <div class="button-label">Отправить</div>
-                        <paper-ripple></paper-ripple>
+        <div id="box">
+            <div id="form">
+                    <paper-input id="i1" autofocus maxlength="20" char-counter error-message="Это обязательное поле!" value="{{form.name}}" label="Имя и Фамилия"
+                    required></paper-input>
+    
+                <paper-input maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}" label="Номер телефона"
+                    required></paper-input>
+    
+                <paper-dropdown-menu id="pmenu" label="Количество гостей" value="{{form.count_people}}">
+                    <paper-listbox id="peoples" class="dropdown-content">
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 9 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 10 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 11 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                        <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 12 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+    
+                <div class="layout-horizontal" id="ptime">
+                    <div class="half">
+                        <paper-input id="ptimestart" label="Время c" value="{{form.time_start}}" on-tap="_showTimeStart"></paper-input>
+    
+    
                     </div>
-                    <div class="button-border" not-valid$="[[!validators.summary]]"></div>
+                    <div class="half">
+                        <paper-input id="ptimeend" label="Время до" value="{{form.time_end}}" on-tap="_showTimeEnd"></paper-input>
+                    </div>
+    
+    
+                </div>
+    
+    
+                <div class="form-comment">
+                    <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="200" char-counter></paper-textarea>
+                </div>
+    
+                <div class="form-actions">
+                    <div>
+                        <div class="button" on-tap="submitForm" processing$="[[loading]]">
+                            <div class="loading-box" visible$="[[loading]]">
+                                <paper-spinner-lite active$="[[loading]]"></paper-spinner-lite>
+    
+                            </div>
+                            <div class="button-label">Отправить</div>
+                            <paper-ripple></paper-ripple>
+                        </div>
+                        <div class="button-border" not-valid$="[[!validators.summary]]"></div>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </template>
 
@@ -235,6 +282,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'gr-reservation-widget',
 
             properties: {
+                detail: {
+                    type: Boolean,
+                    value: false,
+                },
+
                 form: {
                     type: Object,
                     value: function () {
@@ -417,6 +469,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _timeEndClearedHandler: function (e) {
                 this.$.ptimeend.value = '';
             },
+
+            ready: function() {
+                var form_css_prefix = this.detail ? '-event' : '';
+
+                this.$.box.classList.add('form-box' + form_css_prefix);
+                this.$.form.classList.add('form' + form_css_prefix);
+            }
 
 
         });
