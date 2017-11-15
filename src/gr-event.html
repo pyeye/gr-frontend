@@ -53,18 +53,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .content {
                 width: 85%;
-                margin: 48px auto 0 auto;
+                margin: 32px auto 0 auto;
             }
 
             .event-img {
                 position: relative;
-                width: 495px;
-                height: 700px;
-
+                width: 45%;
                 margin: 16px;
                 margin-right: 24px;
                 padding-right: 4px;
-                box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+                
+            }
+
+            .image-box {
+                
+                position: relative;
+                padding-right: 4px;
+                width: calc(100% - 4px);
+            }
+
+            .image-box:before {
+                content: "";
+                display: block;
+                padding-top: 141.42857%;
+            }
+
+            .box-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+            }
+
+            .card-image {
+                position: relative;
+                width: calc(100% - 4px);
+                height: 100%;
             }
 
             .event-border {
@@ -84,7 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .event-info {
                 margin: 16px;
                 position: relative;
-                @apply --layout-flex;
+                width: 55%;
                 @apply --layout-vertical;
             }
 
@@ -124,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 position: absolute;
                 top: 0;
                 left: 0;
-                width: calc(100% - 4px);
+                width: calc(100% + 2px);
                 height: 45%;
                 background-color: var(--app-primary-color);
             }
@@ -135,7 +160,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .event-artist {
-                margin-top: 24px;
+                margin-top: 28px;
 
                 @apply --layout-vertical;
                 @apply --layout-wrap;
@@ -163,7 +188,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 position: absolute;
                 top: 2px;
                 left: 0;
-                width: calc(100% - 4px);
+                width: calc(100% + 2px);
                 height: 40%;
                 background-color: var(--app-primary-color);
             }
@@ -187,7 +212,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 position: absolute;
                 top: 2px;
                 left: 0;
-                width: calc(100% - 4px);
+                width: calc(100% + 2px);
                 height: 35%;
                 background-color: var(--app-primary-color);
             }
@@ -212,11 +237,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 24px;
             }
 
-            .card-image {
-                object-fit: cover;
-                height: 700px;
-                width: 100%;
-            }
 
             .layout-horizontal {
                 @apply --layout-horizontal;
@@ -278,8 +298,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .form {
                 width: 100%;
-
-                max-width: 600px;
+                
+                
             }
 
             .artist-list {
@@ -288,8 +308,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .action-bar {
-                max-width: 600px;
+                margin-top: 16px;
                 position: relative;
+                width: 100%;
             }
 
             .action-bar-img {
@@ -298,21 +319,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: calc(100% + 4px);
             }
 
+            a {
+                text-decoration: none;
+                color: var(--app-text-color);
+            }
+
+            .url-back {
+                position: relative;
+                top: 2px;
+                @apply --paper-font-headline;
+                font-size: 20px;
+                letter-spacing: .7px;
+            }
+
             @media (max-width: 1450px) {
 
-                .event-img {
-                    width: 424px;
-                    height: 600px;
-                }
-
-                .card-image {
-                    height: 600px;
-                }
-
+               
                 .event-date {
                     font-size: 22px;
                 }
             }
+
+          
 
             @media (max-width: 1050px) {
                 .content {
@@ -325,21 +353,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 paper-icon-button {
                     color: var(--app-body-color);
                 }
+
+                a {
+                    text-decoration: none;
+                    color: var(--app-body-color);
+                }
+
+
+          
+
+               
+                
             }
 
             @media (max-width: 768px) {
 
-                .event-border {
-                    bottom: 3px;
-                    height: calc(100% - 6px);
-                }
+                
 
-                .action-bar {
-                    margin-bottom: 24px;
-                }
+               
 
                 .content {
-                    width: 85%;
+                    width: 75%;
                     margin-top: 0;
                 }
                 .event {
@@ -347,22 +381,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
 
                 .event-img {
-                    margin-right: 16px;
-                    width: auto;
-                    height: auto;
+                    width: 100%;
                 }
 
-                .card-image {
-                    height: auto;
+                .event-info {
+                    width: 100%;
                 }
+
+                
+
+                .action-bar {
+                    
+                    margin-bottom: 24px;
+                
+            }
+
+                
             }
 
             @media (max-width: 550px) {
 
                 .content {
-                    width: 97%;
-                    margin-top: -8px;
+                    width: 95%;
+                    margin-top: 16px;
                 }
+
+                .event-img {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .event-info {
+                    margin: 20px 0 0 0;
+                    padding: 0;
+                }
+
+                .event-date {
+                    margin-top: 0;
+                    margin-bottom: 16px;
+                }
+
 
                 .event-name {
                     font-size: 40px;
@@ -375,21 +433,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 .artist-time {
                     font-size: 22px;
                 }
+                
             }
 
             @media (max-width: 410px) {
 
-                .content {
-                    width: 100%;
-                }
+                
                 .event-name {
                     font-size: 36px;
                     margin-bottom: 8px;
                 }
 
-                .event-info {
-                    margin-top: 0;
-                }
+               
 
                 .artist-name {
 
@@ -418,6 +473,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     font-size: 18px;
                 }
             }
+
+            
         </style>
 
         <app-route route="[[route]]" pattern="/:event" data="{{eventData}}"></app-route>
@@ -431,6 +488,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <app-toolbar>
                     <a href="/events" tabindex="-1">
                         <paper-icon-button icon="gr-icons:arrow-back"></paper-icon-button>
+                        <span class="url-back">Cобытия</span>    
                     </a>
                     <div main-title></div>
                 </app-toolbar>
@@ -440,8 +498,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="event">
 
                     <div class="event-img">
-                        <img class="card-image" src="[[_getImage(event)]]" />
-                        <div class="event-border"></div>
+                        <div class="image-box">
+                            <div class="box-image">
+                                <iron-image class="card-image"  sizing="cover" fade src="[[_getImage(event)]]"></iron-image>
+                                <div class="event-border"></div>
+                            </div>
+                        </div>
                         <div class="action-bar-img" hidden$="[[hideImgBtn]]">
                             <div>
                                 <div class="button" on-tap="_toggleForm">
@@ -515,7 +577,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
                         <div class="form" hidden$="[[hideForm]]">
-                            <gr-reservation-widget event="[[event]]"></gr-reservation-widget>
+                            <gr-reservation-widget event="[[event]]" detail></gr-reservation-widget>
                         </div>
                         <div class="action-bar" hidden$="[[!hideImgBtn]]">
                             <div>
@@ -590,7 +652,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _eventPageChanged: function (event) {
                 if (event !== undefined && this.route.prefix === '/event') {
-                    this.$.ajax.url = ['https://greenerybar.ru/api/v1/events', event].join('/') + '/';
+                    this.$.ajax.url = ['http://localhost/api/v1/events', event].join('/') + '/';
                     this.$.ajax.generateRequest();
                 }
             },

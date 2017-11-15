@@ -20,12 +20,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
              :host {
                 display: block;
                 --app-btn-border-color: var(--app-primary-color);
-
                 @apply --layout-vertical;
-                display: inline-block;
-                width: 358px;
-                margin-bottom: 48px;
-                padding: 16px;
+                
                 position: relative;
                 transition: box-shadow .2s ease;
             }
@@ -35,11 +31,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             [hidden] {
                 display: none;
             }
-
-
-
-
-
 
 
             .event-border {
@@ -55,24 +46,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .event-img {
-
                 transition: transform 200ms;
                 position: relative;
-                width: 100%;
-                height: 500px;
                 margin-top: 12px;
                 padding-right: 4px;
-
                 width: calc(100% - 4px);
+            }
+
+            .event-img:before {
+                content: "";
+                display: block;
+                padding-top: 141.42857%;
+                /* initial ratio of 1:1*/
+            }
+
+            .img-box {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
             }
 
             .event-img:hover {
                 -webkit-transform: translate(4px, 4px);
                 transform: translate(4px, 4px);
             }
-
             .event-img:hover .event-border {
-
                 -webkit-transform: translate(-4px, -4px);
                 transform: translate(-4px, -4px);
             }
@@ -82,48 +82,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 text-decoration-color: var(--app-text-color);
             }
 
-
-
-            .green {
-
-                height: 100%;
-                background-color: var(--app-primary-color);
-            }
-
-            .green .card-image {
-                filter: grayscale(100%) contrast(.8);
-                mix-blend-mode: multiply;
-            }
-
-            .green::after {
-                background-color: #263238;
-                mix-blend-mode: lighten;
-            }
-
-            .event-img::after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                transition: all ease-in-out .5s;
-            }
-
             .card-image {
-                object-fit: cover;
-                height: 500px;
-                width: 100%;
+                position: relative;
+                width: calc(100% - 4px);
+                height: 100%;
             }
-
-
-
-
-
 
             .event-date {
-
-
                 color: var(--app-text-color);
                 @apply --paper-font-subhead;
 
@@ -136,8 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .date-day {
-
-
                 margin: 0 4px;
             }
 
@@ -157,6 +120,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 4px;
                 font-weight: bold;
                 font-size: 26px;
+                transition: text-decoration 200ms;
             }
 
             .layout-vertical {
@@ -227,10 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 letter-spacing: 1.5px;
             }
 
-            .form {
-                width: 100%;
-                height: 512px;
-            }
+            
 
             .action-bar {
                 position: relative;
@@ -249,100 +210,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 position: absolute;
                 top: 0;
                 left: 0;
-                width: calc(100% - 3px);
+                width: calc(100% + 2px);
                 height: 40%;
                 background-color: var(--app-primary-color);
             }
 
-            @media (max-width: 1450px) {
-                 :host {
-
-                    width: 358px;
-                }
-
-                .card-image {
-
-                    height: 500px;
-                }
-
-                .event-img {
-
-
-                    height: 500px;
-                }
-            }
-
-            @media (max-width: 1250px) {
-                 :host {
-
-                    width: 358px;
-                }
-
-                .card-image {
-
-                    height: 500px;
-                }
-
-                .event-img {
-
-
-                    height: 500px;
-                }
-            }
-
-            @media (max-width: 800px) {
-
-                 :host {
-
-                    width: 287px;
-                }
-
-                .card-image {
-
-                    height: 400px;
-                }
-
-                .event-img {
-
-
-                    height: 400px;
-                }
-            }
-
-            @media (max-width: 660px) {
-                 :host {
-
-                    width: 358px;
-                }
-
-                .card-image {
-
-                    height: 500px;
-                }
-
-                .event-img {
-
-
-                    height: 500px;
-                }
-            }
+            
 
             @media (max-width: 410px) {
-                 :host {
-                    padding: 8px;
-                    width: 322px;
-                }
+                
 
-                .card-image {
-
-                    height: 450px;
-                }
-
-                .event-img {
-
-
-                    height: 450px;
-                }
+               
 
                 .event-title {
 
@@ -351,21 +229,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             @media (max-width: 360px) {
-                 :host {
-                    padding: 4px;
-                    width: 287px;
-                }
+               
 
-                .card-image {
-
-                    height: 400px;
-                }
-
-                .event-img {
-
-
-                    height: 400px;
-                }
+               
             }
         </style>
 
@@ -390,7 +256,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="event-img" hidden$="[[!hideForm]]">
                     <div class="img-box">
                         <iron-image class="card-image" sizing="cover" fade src="[[_getImage(event)]]"></iron-image>
-
                         <div class="event-border"></div>
                     </div>
                     <paper-ripple></paper-ripple>

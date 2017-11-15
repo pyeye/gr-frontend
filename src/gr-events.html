@@ -133,11 +133,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .content {
-        display: block;
-        max-width: 1200px;
-        position: relative;
-        margin: 32px auto;
-        
+        width: 93%;
+        margin-top: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 16px;
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
+        @apply --layout-end;
+      }
+
+      .event {
+        display: inline-block;
+        -webkit-flex: 1 1;
+        flex: 1 1;
+        -webkit-flex-basis: 30.4%;
+        flex-basis: 30.4;
+        max-width: 30.4%;
+        margin: 48px 16px 16px 16px;
       }
 
 
@@ -148,52 +161,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         app-toolbar.tall {
           height: 250px;
         }
-      }
-
-      @media (max-width: 1450px) {
 
         .content {
-          max-width: 800px;
-        }
+        width: 75%;
+        padding-left: 20px;
+        
       }
 
-      @media (max-width: 800px) {
+      .event {
+       
+        -webkit-flex: 1 1;
+        flex: 1 1;
+        -webkit-flex-basis: 45%;
+        flex-basis: 45%;
+        max-width: 45%;
+        margin: 48px 16px 16px 16px;
+      }
+      }
+
+      @media (max-width: 1300px) {
+
+        
 
         .content {
-          max-width: 645px;
-        }
-
-        app-toolbar.tall {
-          height: 200px;
-        }
+        width: 85%;
+        
       }
 
-      @media (max-width: 660px) {
-
-        .content {
-          max-width: 390px;
-        }
+      
       }
-
-
-
-      @media (max-width: 410px) {
-        .content {
-          max-width: 338px;
-        }
-      }
-
-      @media (max-width: 360px) {
-        .content {
-          max-width: 295px;
-        }
-      }
-
-
-
-
-
-
 
       @media (max-width: 1050px) {
         [main-title] {
@@ -215,13 +211,109 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 20px;
           letter-spacing: 2px;
         }
+        .content {
+        width: 83%;
+        
       }
+      }
+
+      @media (max-width: 800px) {
+
+        
+
+        .content {
+        width: 85%;
+        
+      }
+
+      
+      }
+
+     
+
+      @media (max-width: 768px) {
+        app-toolbar.tall {
+          height: 200px;
+        }
+
+        .content {
+        width: 97%;
+        padding-left: 16px;
+        
+      }
+      }
+
+      @media (max-width: 700px) {
+       
+        .content {
+          width: 75%;
+        padding-left: 0;
+        
+      }
+        .event {
+          
+           -webkit-flex: 1 1;
+           flex: 1 1;
+           -webkit-flex-basis: 75%;
+           flex-basis: 75%;
+           max-width: 75%;
+           margin: 36px auto 16px auto;
+         }
+         }
+
+      @media (max-width: 550px) {
+       
+        .content {
+          width: 85%;
+        padding-left: 0;
+        
+      }
+        .event {
+          
+           -webkit-flex: 1 1;
+           flex: 1 1;
+           -webkit-flex-basis: 90%;
+           flex-basis: 90%;
+           max-width: 90%;
+           margin: 36px auto 16px auto;
+         }
+         }
+
+         @media (max-width: 420px) {
+       
+        .content {
+          width: 95%;
+        padding-left: 0;
+        
+      }
+
+         @media (max-width: 330px) {
+          .content {
+          width: 97%;
+        padding-left: 0;
+        
+      }
+       
+        .event {
+          
+           -webkit-flex: 1 1;
+           flex: 1 1;
+           -webkit-flex-basis: 95%;
+           flex-basis: 95%;
+           max-width: 95%;
+           margin: 36px auto 16px auto;
+         }
+         }
+
+      
+
+      
     </style>
 
     <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <iron-ajax auto handle-as="json" url="https://greenerybar.ru/api/v1/events/" on-response="handleResponse"></iron-ajax>
+    <iron-ajax auto handle-as="json" url="http://localhost/api/v1/events/" on-response="handleResponse"></iron-ajax>
 
     <app-header-layout>
 
