@@ -440,8 +440,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.customStyle['--app-header-front-image'] = 'url(https://greenerybar.ru/img/static/headers/home' + img_size + '.jpg)';
           this.updateStyles();
         });
-              
-        this.$.header.style['backgroundImage'] = this.middleScreen ? 'url(https://greenerybar.ru/img/static/wood_horizontal.jpg)' : '#8BC34A';
+
+        if (this.middleScreen) {
+          this.$.header.style['backgroundImage'] = 'url(https://greenerybar.ru/img/static/wood_horizontal.jpg)'
+        } else {
+          this.$.header.style['backgroundColor'] = '#8BC34A';
+        }
                 
         this.fire('gr-section-change', {
           'section': 'news'

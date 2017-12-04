@@ -241,9 +241,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _generateRequest: function (group) {
         if (group === 'breakfast') {
-          this.$.ajax.url = 'http://localhost/api/v1/breakfast/?format=gr_menu_breakfast';
+          this.$.ajax.url = 'https://greenerybar.ru/api/v1/breakfast/?format=gr_menu_breakfast';
         } else {
-          this.$.ajax.url = 'http://localhost/api/v1/menu/?format=gr_menu&group=' + group;
+          this.$.ajax.url = 'https://greenerybar.ru/api/v1/menu/?format=gr_menu&group=' + group;
         }
         this.$.ajax.generateRequest();
       },

@@ -133,7 +133,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .content {
-        width: 93%;
+        width: 85%;
         margin-top: 16px;
         margin-left: auto;
         margin-right: auto;
@@ -151,6 +151,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         flex-basis: 30.4;
         max-width: 30.4%;
         margin: 48px 16px 16px 16px;
+      }
+
+      @media (max-width: 1700px) {
+        .content {
+          width: 93%;
+        }
       }
 
 
@@ -313,7 +319,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-media-query query="max-width: 1050px" query-matches="{{middleScreen}}"></iron-media-query>
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <iron-ajax auto handle-as="json" url="http://localhost/api/v1/events/" on-response="handleResponse"></iron-ajax>
+    <iron-ajax auto handle-as="json" url="https://greenerybar.ru/api/v1/events/" on-response="handleResponse"></iron-ajax>
 
     <app-header-layout>
 

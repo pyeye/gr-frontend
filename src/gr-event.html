@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../bower_components/d2l-more-less/d2l-more-less.html">
 <link rel="import" href="gr-reservation-widget.html">
 
 <link rel="import" href="shared-styles.html">
@@ -52,7 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .content {
-                width: 85%;
+                width: 80%;
                 margin: 32px auto 0 auto;
             }
 
@@ -332,6 +333,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 letter-spacing: .7px;
             }
 
+            @media (max-width: 1700px) {
+                .content {
+                    width: 85%;
+                 }
+            }
+
             @media (max-width: 1450px) {
 
                
@@ -498,12 +505,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="event">
 
                     <div class="event-img">
-                        <div class="image-box">
-                            <div class="box-image">
-                                <iron-image class="card-image"  sizing="cover" fade src="[[_getImage(event)]]"></iron-image>
-                                <div class="event-border"></div>
-                            </div>
-                        </div>
+                            <d2l-more-less height="16em" blur-color="#ddd" hidden$="[[!smallScreen]]">
+                                    <div class="image-box">
+                                            <div class="box-image">
+                                                <iron-image class="card-image"  sizing="cover" fade src="[[_getImage(event)]]"></iron-image>
+                                                <div class="event-border"></div>
+                                            </div>
+                                        </div>
+                            </d2l-more-less>
+                            <div class="image-box" hidden$="[[smallScreen]]">
+                                    <div class="box-image">
+                                        <iron-image class="card-image"  sizing="cover" fade src="[[_getImage(event)]]"></iron-image>
+                                        <div class="event-border"></div>
+                                    </div>
+                                </div>
+                        
                         <div class="action-bar-img" hidden$="[[hideImgBtn]]">
                             <div>
                                 <div class="button" on-tap="_toggleForm">
@@ -652,7 +668,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _eventPageChanged: function (event) {
                 if (event !== undefined && this.route.prefix === '/event') {
-                    this.$.ajax.url = ['http://localhost/api/v1/events', event].join('/') + '/';
+                    this.$.ajax.url = ['https://greenerybar.ru/api/v1/events', event].join('/') + '/';
                     this.$.ajax.generateRequest();
                 }
             },

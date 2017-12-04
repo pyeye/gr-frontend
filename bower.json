@@ -55,7 +55,8 @@
     "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.0",
     "bottom-nav": "greenyouse/bottom-nav#^0.2.0",
     "app-bottom-nav": "samthecodingman/app-bottom-nav#^0.0.4",
-    "vaadin-icons": "^4.1.0"
+    "vaadin-icons": "^4.1.0",
+    "d2l-more-less": "BrightspaceUI/more-less#^3.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
